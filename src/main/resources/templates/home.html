@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:href="@{/styles/general.css}" rel="stylesheet" />
+    <link th:href="@{/styles/homestyles.css}" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" sizes="16x16" href="/images/favicon.ico">
+</head>
+<body>
+
+
+    <header id="header">
+        <p id="authorizedText" style="display: none;" th:text="${#authorization.expression('isAuthenticated()')}">
+        <div class="header__container">
+            <div class="header__content">
+                <div class="overlay"></div>
+            </div>
+            <div class="header_navigation">
+                <div class="logo_img" id="theme-toggle" title="SwapStyle"></div>
+                <div th:class="${#authorization.expression('isAuthenticated()')} ? 'hidden' : 'nav_link'" >
+                    <a class="nav_link" href="#login_Section">Увійти</a>
+                    <a class="nav_link" >|</a>
+                    <a class="nav_link" href="#register_Section">Зареєструватись</a>
+                </div>
+                <div th:class="${#authorization.expression('isAuthenticated()')} ? 'nav_link' : 'hidden'" >
+                    <a class="nav_link" href="/content#tschedule">Графік тренувань</a>
+                    <a class="nav_link" style="pointer-events: none;" >|</a>
+                    <div class="dropdown">
+                        <p id="authorizeUserName" class="dropbtn" th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">Username</p>
+                        <div class="dropdown-content">
+                            <a th:href="@{/content#characteristic}">Характеристика</a>
+                            <a class="nav_link" href="#add_News" sec:authorize="hasAuthority('ROLE_ADMIN')">Добавити новину</a>
+                            <form th:action="@{/logout}" method="post">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit">Вийти</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+    <main>
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+        <!-- Успішне повідомлення -->
+        <div th:if="${param.registerSuccess}" class="error-message">
+            <p >Реєстрація пройшла успішно!</p>
+        </div>
+
+        <!-- Повідомлення про помилку -->
+        <div th:if="${param.registerError}" class="error-message">
+            <p >Виникла помилка під час реєстрації. Спробуйте ще раз.</p>
+        </div>
+
+        <section class="newsLogoSection">
+            <div class="logoContainer">
+                <div class="logoNews">НОВИНИ</div>
+            </div>
+            <div class="socialContainer">
+                <div class="overlayNews"></div>
+                <div class="socialIcon telegram"></div>
+                <div class="socialIcon youtube"></div>
+                <!-- Додайте інші соціальні мережі за потреби -->
+            </div>
+        </section>
+        <section class="newsDataSection">
+            <div class="main_container">
+                <div class="slider">
+                    <div th:each="news,iterStat : ${newsList}" class="slide">
+                        <div sec:authorize="hasAuthority('ROLE_ADMIN')" class="delete-icon" th:data-id="${news.id}" onclick="confirmDelete(this)"></div>
+                        <img th:if="${news.image != null}" th:src="@{'/bdimage/' + ${news.id}}" th:alt="${news.title}" th:class="image_news">
+                        <div class="slide_content">
+                                <!-- Перевіряємо, чи поле title не є пустим (або не нульовим) -->
+                            <h3 class="news_title" th:if="${news.title != null}" th:text="${news.title}">Заголовок новости</h3>
+                                <!-- Перевіряємо, чи поле text не є пустим (або не нульовим) -->
+                            <p class="news_text" th:if="${news.text != null}" th:text="${news.text}">Текст новости</p>
+                                <!-- Перевіряємо, чи поле link не є пустим (або не нульовим) -->
+                            <a href="#" class="news_link" th:if="${news.link != null}" th:href="${news.link}">ДЕТАЛЬНІШЕ</a>
+                            <div class="divider" th:unless="${iterStat.last}"></div>
+                        </div>
+                    </div>
+                    <!-- Добавьте інші слайди тут -->
+                </div>
+            </div>
+        </section>
+
+        <section id="loginSection" class="hidden" >
+            <div id="loginForm" class="login_form">
+                <form id="loginProcess" th:action="@{/authenticate}" method="post">
+                    <label for="username">Ім'я користувача:</label>
+                    <input type="text" id="username" name="username" placeholder="Введіть логін..." required><br><br>
+
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password" placeholder="Введіть пароль..." required><br><br>
+
+                    <button class="submit_button" type="submit">Увійти</button>
+                </form>
+
+                <p>Немає акаунта? <a id="swap_to_register">Реєстрація</a></p>
+            </div>
+        </section>
+
+        <section id="registerSection" class="hidden">
+            <div id="registerForm" class="register_form">
+                <form id="registrationForm" th:action="@{/register}" method="post" enctype="multipart/form-data">
+<!--                    Spring security in thymeleaf автоматично додає токен-->
+<!--                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>-->
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Введіть свій email..." required><br><br>
+
+                    <label for="login">Логін:</label>
+                    <input type="text" id="login" name="username" placeholder="Введіть логін..." required><br><br>
+
+                    <label for="pass">Пароль:</label>
+                    <input type="password" id="pass" name="password" placeholder="Введіть пароль..." required><br><br>
+
+                    <label for="confirmPassword">Підтвердіть пароль:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Підтвердіть пароль..." required><br><br>
+
+                    <label for="image-register" class="image-upload-label">
+                        <span id="file-label-register">Оберіть зображення</span>
+                        <input type="file" id="image-register" name="image-register" accept="image/*" onchange="updateLabel('image-register','file-label-register',1000,700)">
+                    </label>
+
+                    <button class="submit_button" type="submit">Зареєструватися</button>
+                </form>
+
+                <p>Вже маєте акаунт? <a id="swap_to_login">Увійти</a></p>
+            </div>
+        </section>
+
+        <section id="addNewsSection" class="hidden">
+            <div id="addNewsForm" class="news_form">
+                <form id="newsForm" th:action="@{/news/add}" method="post" enctype="multipart/form-data">
+                    <!-- Spring Security in Thymeleaf automatically adds the token -->
+                    <!-- <input type="hidden" name="_csrf" th:value="${_csrf.token}"/> -->
+
+                    <label for="title">Заголовок:</label>
+                    <input type="text" id="title" name="title" maxlength="80" placeholder="Введіть заголовок новини..." required><br><br>
+
+                    <label for="text">Текст:</label>
+                    <textarea class="text-news" id="text" name="text" maxlength="750" placeholder="Введіть текст новини..." rows="4" required></textarea><br><br>
+
+                    <label for="link">Посилання:</label>
+                    <input type="text" id="link" name="link" placeholder="Введіть посилання..." required><br><br>
+
+                    <label for="image-news" class="image-upload-label">
+                        <span id="file-label-news">Оберіть зображення</span>
+                        <input type="file" id="image-news" name="image-news" accept="image/*" onchange="updateLabel('image-news','file-label-news',3,1400)">
+                    </label>
+
+                    <button class="submit_button" type="submit">Додати новину</button>
+                </form>
+            </div>
+        </section>
+
+
+        <!-- Оверлей -->
+        <div id="overlayEnter" class="hidden"></div>
+
+        <div th:class="${#authorization.expression('isAuthenticated()')} ? 'chat-container' : 'hidden'">
+            <button class="open-chat-btn" onclick="showChat()">Open Chat</button>
+
+            <div id="generalChatBox" class="chat-box">
+                <div class="chat-header">
+                    <button class="tab-header active" onclick="showChat()">General</button>
+                    <button class="tab-header" onclick="showUserList()">User to User</button>
+                    <button class="close-chat-btn" onclick="closeChat('generalChatBox')">X</button>
+                </div>
+                <div class="chat-content" id="generalChatContent">
+                    <!-- Chat messages will be added here -->
+                </div>
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <input type="text" id="generalChatInput" placeholder="Type a message..." maxlength="255" oninput="updateCharCount('generalChatInput','chatGeneralCount')">
+                        <div class="char-count" id="chatGeneralCount">0/255</div>
+                    </div>
+                    <button onclick="sendMessageToGeneral()">Send</button>
+                </div>
+            </div>
+            <div id="userList" class="user-list">
+                <div class="user-list-header">
+                    <button class="tab-header" id="test_all" onclick="showChat()">Back</button>
+                    <span>Select User to Chat</span>
+                    <button class="close-chat-btn" onclick="closeChat('userList')">X</button>
+                </div>
+                <div class="collapsible">
+                    <button class="collapsible-header" onclick="toggleList('onlineUserListContent')" style="color: #007bff">ONLINE</button>
+                    <ul id="onlineUserListContent" class="collapsible-content">
+                        <!-- Online user list items will be added here dynamically -->
+                    </ul>
+                </div>
+                <div class="collapsible">
+                    <button class="collapsible-header" onclick="toggleList('userListContent')" style="color: #676363">OFFLINE</button>
+                    <ul id="userListContent" class="collapsible-content">
+                        <!-- Offline user list items will be added here dynamically -->
+                    </ul>
+                </div>
+            </div>
+            <div id="chatBox" class="chat-box">
+                <div class="chat-header">
+                    <button class="tab-header" onclick="showUserList()">Back</button>
+                    <span id="chatWithUser"></span>
+                    <button class="close-chat-btn" onclick="closeChat('chatBox')">X</button>
+                </div>
+                <div class="chat-content" id="chatContent">
+                    <!-- Chat messages will be added here -->
+                </div>
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <input type="text" id="chatToUserInput" placeholder="Type a message..." maxlength="255" oninput="updateCharCount('chatToUserInput','charToUserCount')">
+                        <div class="char-count" id="charToUserCount">0/255</div>
+                    </div>
+                    <button onclick="sendMessageToUser()">Send</button>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+
+    <img th:src="@{/images/nightStartLogo.jpg}" alt="Full Screen Image" class="full-screen-image">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/general.js}"></script>
+    <script type="text/javascript" th:src="@{/js/homejs.js}"></script>
+</body>
+</html>

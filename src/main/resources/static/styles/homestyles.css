@@ -1,0 +1,648 @@
+
+/* Стилі для основного контейнера випадаючого меню */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 25px;
+
+}
+
+/* Стилі для тексту, що викликає випадаюче меню */
+.dropbtn {
+    font-size: 19px;
+    color: white;
+    width: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    cursor: pointer;
+    transition: color .3s;
+    padding: 6px 5px;
+    text-align: center;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Стилі для контейнера випадаючого вмісту */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    width: 130px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    color: orange;
+}
+
+.dropdown-content a {
+    font-family: "Times New Roman", sans-serif;
+    font-weight: normal;
+    color: #333;
+    padding: 6px 5px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #ccc;
+    font-size: 17px;
+}
+
+.dropdown-content button {
+    font-family: "Times New Roman", sans-serif;
+    font-weight: normal;
+    color: #333;
+    padding: 6px 5px;
+    text-decoration: none;
+    display: block;
+    border: none;
+    font-size: 17px;
+    background: none;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+}
+
+.dropdown-content button:hover {
+    background-color: #f2f2f2;
+}
+
+.dropdown-content a:hover {
+    background-color: #f2f2f2;
+    color: #000;
+}
+
+
+.video{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+/*newsLogoSection*/
+
+.newsLogoSection {
+    position: fixed;
+    bottom: 580px;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 100px;
+    width: 830px;
+    background-color: #eed5d5;
+    background-size: cover;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 101;
+    border-radius: 7px;
+    box-shadow: 0 2px 5px rgb(0, 0, 0);
+    background-image: url('../images/SportPlace.png');
+
+}
+
+
+
+.logoContainer {
+    display: flex;
+    align-items: center;
+}
+
+.logoNews {
+    font-weight: bold;
+    font-size: 28px;
+    background-color: #ffffff;
+    color: #264488;
+    border-radius: 50%;
+    width: 180px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.5);
+}
+
+.socialContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #264488;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: inset 0 0 7px rgba(175, 148, 148, 0.5);
+}
+
+.overlayNews {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(101, 96, 96);
+    opacity: 55%;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.socialIcon {
+    width: 50px;
+    height: 50px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.socialIcon.telegram {
+    background-image: url('../images/Telegram_Messenger.png');
+    margin-right: 5px;
+}
+
+.socialIcon.youtube {
+    background-image: url("../images/Youtube_logo.png");
+    margin-left: 5px;
+}
+
+/*SECTION Data NEWS*/
+
+.newsDataSection {
+    border-radius: 7px;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 580px;
+    width: 850px;
+    background-image: linear-gradient(to bottom right, #ccbebe, #000000);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.main_container {
+    height: 520px;
+    width: 85%;
+    box-shadow: inset 0 0 7px rgba(255, 255, 255, 0.5);
+    overflow: hidden;
+}
+
+.image_news {
+    margin: 13px auto 0;
+    display: block;
+    width: 90%;
+    height: 310px;
+    border-radius: 15px;
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgb(255, 255, 255);
+}
+
+.news_title {
+    text-align: center;
+}
+
+
+/* Стили для слайдера */
+.slider {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.slider::-webkit-scrollbar {
+    width: 10px;
+}
+
+.slider::-webkit-scrollbar-thumb {
+    background-color: #1d1a6b;
+    border-radius: 4px;
+}
+
+.slider::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+.slide {
+    color: #ffffff;
+    padding: 10px 10px 5px 10px;
+    position: relative;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    transition: transform 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-icon::before, .delete-icon::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background-color: #fb0000;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.delete-icon::before {
+    transform: rotate(45deg);
+}
+
+.delete-icon::after {
+    transform: rotate(-45deg);
+}
+
+.delete-icon:hover {
+    transform: rotate(360deg);
+}
+
+
+.divider {
+    border-bottom: 6px solid #ffffff;
+    margin: 8px 3px 3px 3px;
+}
+
+.slide_content {
+    padding: 20px 20px 5px 20px;
+}
+
+/* Стилі для заголовків, тексту та посилань на новини */
+.news_title, .news_text, .news_link {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.news_title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+.news_text {
+    text-indent: 20px;
+    font-size: 18px;
+    margin-bottom: 12px;
+    margin-left: 5px;
+    margin-right: 3px;
+    word-wrap: break-word;
+    text-align: justify;
+}
+
+.news_link {
+    color: #000000;
+    background-color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+    word-wrap: break-word;
+    display: block;
+    width: auto;
+    padding: 10px 10px;
+    border-radius: 5px;
+    margin: 15px auto 15px auto;
+    text-align: center;
+    max-width: 200px;
+    font-weight: bold;
+    box-shadow: 0 0 0 rgb(50, 143, 115);
+    border: 1px solid black;
+    transition: padding 0.3s ease, box-shadow 0.3s ease;
+}
+
+.news_link:hover {
+    padding: 10px 12px;
+    box-shadow: 0 2px 15px rgb(255, 255, 255);
+}
+
+.slide:not(:last-child) {
+    margin-bottom: 4px;
+}
+
+
+
+/*login*/
+
+.hidden {
+    display: none;
+}
+
+#overlayEnter {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+
+#loginSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-image: linear-gradient(to bottom right, #ffffff, #d2d0d0);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.login_form {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_form form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.login_form label,
+.login_form input {
+    width: 85%;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-size: 22px;
+}
+
+.login_form input {
+    border: 1px solid #949393;
+    padding: 5px 4px;
+    border-radius: 5px;
+}
+
+.submit_button {
+    padding: 10px 20px;
+    background-color: #264488;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    width: 60%;
+    text-align: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 0.4s, transform 0.3s;
+}
+
+.submit_button:hover {
+    background-color: #1a3066;
+    transform: scale(1.05);
+}
+
+.login_form p {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.login_form p a {
+    color: #1636a2;
+    margin-left: 60px;
+}
+
+.login_form a {
+    cursor: pointer;
+}
+
+.login_form p a:hover {
+    text-decoration: underline;
+}
+
+
+/*error*/
+.error-message {
+    font-size: 18px;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    color: #ec3747;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 301;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.error-message.hide {
+    opacity: 0;
+}
+
+
+/*register */
+
+#registerSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-image: linear-gradient(to bottom right, #ffffff, #d2d0d0);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+
+.register_form {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_form form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.register_form label,
+.register_form input {
+    width: 85%;
+    max-width: 100%;
+    font-size: 22px;
+}
+
+.register_form input {
+    border: 1px solid #949393;
+    padding: 5px 4px;
+    border-radius: 5px;
+}
+
+
+.register_form p {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.register_form p a {
+    color: #1636a2;
+    margin-left: 65px;
+}
+
+.register_form a {
+    cursor: pointer;
+}
+
+.register_form p a:hover {
+    text-decoration: underline;
+}
+
+
+/*image register*/
+.image-upload-label {
+    display: inline-block;
+    padding: 5px 2px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #949393;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.image-upload-label span {
+    margin-right: 10px;
+}
+
+.image-upload-label input[type="file"] {
+    display: none;
+}
+
+/*ADD News Section*/
+
+#addNewsSection {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-image: linear-gradient(to bottom right, #ffffff, #d2d0d0);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1001;
+}
+
+.news_form {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.news_form form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.news_form label,
+.news_form input,
+.news_form textarea {
+    width: 85%;
+    font-size: 22px;
+}
+
+.news_form input,
+.news_form textarea {
+    border: 1px solid #949393;
+    padding: 5px 4px;
+    border-radius: 5px;
+}
+
+
+.image-upload-label {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f1f1f1;
+    border: 1px solid #949393;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 4px;
+    transition: background-color 0.4s, border-color 0.3s;
+}
+
+.image-upload-label span {
+    margin-left: 10px;
+    font-size: 18px;
+}
+
+.image-upload-label:hover{
+    background-color: #dadada;
+    border-color: #5a5858;
+}
+
+
+.text-news {
+    max-width: 90%;
+    max-height: 300px;
+    min-width: 55%;
+    min-height: 150px;
+    width: 100%;
+    height: 100px;
+    resize: both;
+}
