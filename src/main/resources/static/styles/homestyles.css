@@ -507,7 +507,6 @@
 .register_form label,
 .register_form input {
     width: 85%;
-    max-width: 100%;
     font-size: 22px;
 }
 
@@ -542,11 +541,10 @@
 }
 
 
-/*image register*/
 .image-upload-label {
     display: inline-block;
     padding: 5px 2px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #949393;
@@ -563,6 +561,31 @@
 
 .image-upload-label input[type="file"] {
     display: none;
+}
+
+/* Контейнер відправки розсилки */
+.checkbox-newsletter-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    width: 85%;
+}
+
+.checkbox-newsletter-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.checkbox-newsletter-container.label-newsletter label{
+    font-size: 14px;
+    overflow-wrap: break-word;
+    color: #333;
+    cursor: pointer;
+    max-width: 85%;
+    width: auto;
 }
 
 /*ADD News Section*/

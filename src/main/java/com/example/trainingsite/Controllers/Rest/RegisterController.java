@@ -34,17 +34,18 @@ public class RegisterController {
 
 
     @PostMapping(consumes=MediaType.MULTIPART_FORM_DATA_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-    public RegistrationResponse uploadFile(@RequestParam(required=true, value="image-register",name = "image-register") MultipartFile file,
+    public RegistrationResponse uploadFile(@RequestParam(value="image-register",name = "image-register") MultipartFile file,
                                            @RequestParam(name = "email") String email,
                                            @RequestParam(name = "username") String username,
                                            @RequestParam(name = "password") String password,
-                                           @RequestParam(name = "confirmPassword") String confirmPassword){
+                                           @RequestParam(name = "confirmPassword") String confirmPassword,
+                                           @RequestParam(name = "newsletterSub", defaultValue = "false") Boolean newsletterSub){
         try {
             byte[] bytes = null;
             if(file.getBytes().length > 0){
                 bytes = file.getBytes();
             }
-            if (!Pattern.matches("^[\\w\\-\\.]+@[\\w]{2,4}$",email)){
+            if (!Pattern.matches("[a-zA-Z0-9+._%\\-]{1,256}@[a-zA-Z0-9][a-zA-Z0-9\\-]{1,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})",email)){
                 return new RegistrationResponse(false,"Ваша пошта має невірний формат.");
             }
             if(password.length() < 8 || password.length() > 20){
@@ -57,7 +58,7 @@ public class RegisterController {
                 return new RegistrationResponse(false,"Користувач з таким логіном вже зареєстрований.");
             }
             User user = new User(username,passwordEncoder.encode(password),
-                email,bytes,"ROLE_USER");
+                email,bytes,"ROLE_USER",newsletterSub);
             userRepo.save(user);
         } catch (Exception e){
             return new RegistrationResponse(false,"Сталась помилка під час збереження.");

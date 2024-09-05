@@ -38,6 +38,8 @@ public class User implements UserDetails, Serializable {
 
     private String role;
 
+    private boolean newsletterSub;
+
     @OneToMany(mappedBy = "receiverId")
     @SQLRestriction("um1_0.is_read = 'false'")
     private List<MessageUserToUser> unreadMessage;
@@ -57,12 +59,13 @@ public class User implements UserDetails, Serializable {
         ONLINE,OFFLINE
     }
 
-    public User(String username, String password, String email, byte[] image, String role) {
+    public User(String username, String password, String email, byte[] image, String role,boolean newsletterSub) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.image = image;
         this.role = role;
+        this.newsletterSub = newsletterSub;
     }
 
 

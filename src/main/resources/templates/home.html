@@ -129,6 +129,11 @@
                         <input type="file" id="image-register" name="image-register" accept="image/*" onchange="updateLabel('image-register','file-label-register',1000,700)">
                     </label>
 
+                    <div class="checkbox-newsletter-container label-newsletter">
+                        <input type="checkbox" id="newsletterSub" name="newsletterSub">
+                        <label for="newsletterSub">Підписатися на розсилку (ви зможете змінити цей параметр у будь-який момент у своєму профілі).</label>
+                    </div>
+
                     <button class="submit_button" type="submit">Зареєструватися</button>
                 </form>
 
@@ -149,12 +154,17 @@
                     <textarea class="text-news" id="text" name="text" maxlength="750" placeholder="Введіть текст новини..." rows="4" required></textarea><br><br>
 
                     <label for="link">Посилання:</label>
-                    <input type="text" id="link" name="link" placeholder="Введіть посилання..." required><br><br>
+                    <input type="text" id="link" name="link" placeholder="Введіть посилання..."><br><br>
 
                     <label for="image-news" class="image-upload-label">
                         <span id="file-label-news">Оберіть зображення</span>
                         <input type="file" id="image-news" name="image-news" accept="image/*" onchange="updateLabel('image-news','file-label-news',3,1400)">
                     </label>
+
+                    <div class="checkbox-newsletter-container label-newsletter">
+                        <input type="checkbox" id="addToMailing" name="addToMailing">
+                        <label for="addToMailing">Також відправити як розсилку.</label>
+                    </div>
 
                     <button class="submit_button" type="submit">Додати новину</button>
                 </form>
