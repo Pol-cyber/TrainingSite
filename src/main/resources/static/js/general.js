@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         receiveMessageFromUser(text);
                         stompClient.send('/receive.specific', {}, JSON.stringify({ 'id': data.id}));
                     } else {
-                        alert("Hello");
+                        alert("Вам надійшло повідомлення від іншого користувача.");
                     }
                 }
             });

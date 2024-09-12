@@ -7,6 +7,7 @@ import com.example.trainingsite.configuration.EmailMessagingGateway;
 import com.example.trainingsite.repository.NewsRep;
 import com.example.trainingsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,9 @@ public class NewsController {
     private NewsRep newsRep;
     @Autowired
     private UserRepo userRepo;
+
+    @Value("${mail.email}")
+    private String emailForNewsletter;
 
     @Autowired
     private EmailMessagingGateway emailMessagingGateway;
@@ -52,7 +56,7 @@ public class NewsController {
                 mailMessage.setText(textEmail);
                 String[] emails = userRepo.getEmailsByNewsletterSubIsTrue().toArray(new String[0]);
                 mailMessage.setTo(emails);
-                mailMessage.setFrom("********");
+                mailMessage.setFrom(emailForNewsletter);
                 emailMessagingGateway.addToNewsletter(mailMessage);
             }
             newsRep.save(news);
