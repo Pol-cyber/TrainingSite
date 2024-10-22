@@ -34,4 +34,63 @@ public class UserDTO {
         }
         this.status = status;
     }
+
+    private UserDTO(Builder builder) {
+        this.username = builder.username;
+        this.email = builder.email;
+        this.image = builder.image;
+        this.role = builder.role;
+        this.unreadMessage = builder.unreadMessage;
+        this.status = builder.status;
+    }
+
+    public static class Builder {
+        private String username;
+        private String email;
+        private byte[] image;
+        private String role;
+        private User.Status status;
+        private Map<String, Integer> unreadMessage = new HashMap<>();
+
+        public Builder setUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder setImage(byte[] image) {
+            this.image = image;
+            return this;
+        }
+
+        public Builder setRole(String role) {
+            this.role = role;
+            return this;
+        }
+
+        public Builder setStatus(User.Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public Builder setUnreadMessage(List<MessageUserToUser> unreadMessageList) {
+            if (unreadMessageList != null) {
+                for (MessageUserToUser messageUserToUser : unreadMessageList) {
+                    this.unreadMessage.put(
+                            messageUserToUser.getSenderId(),
+                            this.unreadMessage.getOrDefault(messageUserToUser.getSenderId(), 0) + 1
+                    );
+                }
+            }
+            return this;
+        }
+
+        public UserDTO build() {
+            return new UserDTO(this);
+        }
+    }
 }

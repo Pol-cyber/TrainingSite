@@ -48,6 +48,9 @@ public class User implements UserDetails, Serializable {
     @Enumerated(EnumType.STRING)
     private Status status = Status.OFFLINE;
 
+    @OneToOne(mappedBy = "user")
+    private UserCharacteristic userCharacteristic;
+
     @Override
     public String toString() {
         return "User{" +

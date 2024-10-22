@@ -25,73 +25,129 @@
 </header>
 
 <main>
+    <p class="additionalInformation error-message" style="opacity: 0">Помилка</p>
+
     <p id="authorizeUserName" style="display: none" th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">Username</p>
     <div class="container">
         <!-- Перша секція з зображенням користувача та меню -->
         <section class="user-menu">
             <div class="user-image">
-                <img th:if="${#authentication.principal.image != null}" th:src="@{'/bdimage/user/' + ${#authentication.principal.username}}" th:alt="UserImage">
-                <img th:unless="${#authentication.principal.image != null}" th:src="@{/images/userDefault.jpg}" th:alt="UserImage">
+                <img th:if="${#authentication.principal.image != null}"
+                     th:src="@{'/bdimage/user/' + ${#authentication.principal.username}}" th:alt="UserImage">
+                <img th:unless="${#authentication.principal.image != null}" th:src="@{/images/userDefault.jpg}"
+                     th:alt="UserImage">
             </div>
             <div class="menu-items">
-                <a href="#" onclick="showForm('characteristic')" id="characteristic-link" class="menu-link">Характеристика</a>
-                <a href="#" onclick="showForm('tschedule')" id="tschedule-link" class="menu-link">Тренування</a>
-                <a href="#" onclick="showForm('technical-support')" id="technical-support-link" class="menu-link">Тех. підтримка</a>
-                <a href="#" onclick="showForm('social-media')" id="social-media-link" class="menu-link">Соц. мережі</a>
+                <a  onclick="showForm('characteristics')" id="characteristics-link" class="menu-link">Характеристика</a>
+                <a  onclick="showForm('tSchedule')" id="tSchedule-link" class="menu-link">Тренування</a>
+                <a  onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Тех.
+                    підтримка</a>
+                <a  onclick="showAllMedia()" id="social-media-link" class="menu-link">Соц. мережі</a>
                 <!-- Додайте інші пункти меню, якщо потрібно -->
             </div>
         </section>
-        <!-- Друга секція для налаштувань та контенту -->
-        <section class="settings-content">
-            <form th:class="characteristic" action="" method="post">
-                <h2>Характеристики</h2>
-                <div class="form-content">
-                    <div class="form-section">
-                        <label for="age">Вік:</label>
-                        <input type="number" id="age" name="age" value="22">
-                        <label for="weight">Вага(кг):</label>
-                        <input type="number" id="weight" name="weight" value="67">
-                        <label for="height">Ріст(см):</label>
-                        <input type="number" id="height" name="height" value="181">
-                        <label for="heart">Проблеми із серцем?</label>
-                        <input type="checkbox" id="heart" name="heart">
-                    </div>
-                    <div class="divider">
-                    </div>
-                    <div class="form-section">
-                        <label for="gender">Стать:</label>
-                        <div class="styled-select">
-                            <select id="gender" name="gender">
-                                <option value="Чоловік" selected>Чоловік</option>
-                                <option value="Жінка">Жінка</option>
-                            </select>
+        <div class="settings-content">
+            <!-- Друга секція для характеристики користувача -->
+            <section class="characteristics-section">
+                <form id="characteristicForm" class="characteristic-form" th:action="@{/api/user/characteristic}" method="post">
+                    <h2>Характеристики</h2>
+                    <div class="form-content">
+                        <div class="form-section">
+                            <label for="age">Вік:</label>
+                            <input type="number" id="age" name="age" value="22">
+                            <label for="weight">Вага (кг):</label>
+                            <input type="number" id="weight" name="weight" value="67">
+                            <label for="height">Ріст (см):</label>
+                            <input type="number" id="height" name="height" value="181">
+                            <label for="heartProblems">Проблеми із серцем?</label>
+                            <input type="checkbox" id="heartProblems" name="heartProblems">
                         </div>
-                        <label for="purtraining">Мета тренування:</label>
-                        <div class="styled-select">
-                            <select id="purtraining" name="purtraining">
-                                <option value="НабірМ" selected>Набір м'язової маси</option>
-                                <option value="ВтратаВ">Втрата ваги</option>
-                                <option value="ПідтримкаФорми">Підтримка форми</option>
-                                <option value="Реабілітація">Реабілітація</option>
-                            </select>
+                        <div class="divider"></div>
+                        <div class="form-section">
+                            <label for="gender">Стать:</label>
+                            <div class="styled-select">
+                                <select id="gender" name="gender">
+                                    <option value="Чоловік" selected>Чоловік</option>
+                                    <option value="Жінка">Жінка</option>
+                                </select>
+                            </div>
+                            <label for="trainingGoal">Мета тренування:</label>
+                            <div class="styled-select">
+                                <select id="trainingGoal" name="trainingGoal">
+                                    <option value="НабірМ" selected>Набір м'язової маси</option>
+                                    <option value="ВтратаВ">Втрата ваги</option>
+                                    <option value="ПідтримкаФорми">Підтримка форми</option>
+                                    <option value="Реабілітація">Реабілітація</option>
+                                </select>
+                            </div>
+                            <label for="fitnessLevel">Рівень фізичної підготовки:</label>
+                            <div class="styled-select">
+                                <select id="fitnessLevel" name="fitnessLevel">
+                                    <option value="Початківець" selected>Початківець</option>
+                                    <option value="Досвідчений">Досвідчений</option>
+                                </select>
+                            </div>
+                            <label for="obesity">Присутнє ожиріння?</label>
+                            <input type="checkbox" id="obesity" name="obesity">
                         </div>
-                        <label for="levelofpt">Рівень фізичної підготовки:</label>
-                        <div class="styled-select">
-                            <select id="levelofpt" name="levelofpt">
-                                <option value="Початківець" selected>Початківець</option>
-                                <option value="Досвідчений">Досвідчений</option>
-                            </select>
-                        </div>
-                        <label for="obesity">Присутнє ожиріння?</label>
-                        <input type="checkbox" id="obesity" name="obesity">
                     </div>
-                </div>
-                <button class="submit_button" type="submit">Підтвердити</button>
-            </form>
-            <form th:class="tschedule" action="" method="post">
+                    <button class="submit_button" type="submit" th:text="${haveCharacteristics == true ? 'Оновити характеристику' : 'Підтвердити характеристику'}">Підтвердити</button>
+                </form>
+            </section>
 
-            </form>
-        </section>
+            <!-- Третя секція для створення графіку тренувань -->
+            <section class="tSchedule-section">
+                <form class="tSchedule-form" action="/submitSchedule" method="post">
+                    <h2>Мій графік</h2><br>
+                    <div th:if="${!(hasTrainingPlan == true)}" class="highlight-block">
+                        <label>
+                            У вас ще не створено графік <br>
+                            Будь ласка заповніть відомості
+                        </label>
+                    </div>
+                    <div class="form-content">
+                        <div class="form-section">
+                            <label>Виберіть види тренування:</label>
+                            <div class="checkboxes">
+                                <label>
+                                    Медитація
+                                    <input class="checkboxesLabel" type="checkbox" name="meditation" checked>
+                                </label>
+                                <label>
+                                    Силове навантаження
+                                    <input class="checkboxesLabel" type="checkbox" name="strength">
+                                </label>
+                                <label>
+                                    Кардіо
+                                    <input class="checkboxesLabel" type="checkbox" name="cardio">
+                                </label>
+                            </div>
+                            <p class="additionalInformation error-message" style="display: none">Потрібно вибрати щонайменше один елемент</p>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <label for="difficulty">Виберіть рівень % важкості для вас</label>
+                            <div class="slider-container">
+                                <div>
+                                    <output id="sliderValue">0</output> <label>%</label>
+                                </div>
+                                <input type="range" id="difficulty" name="difficulty" min="-100" max="100" value="0" oninput="sliderValue.value = this.value">
+                            </div>
+                            <div class="sliderAdditionalInformation">
+                                <label class="additionalInformation">(Цей рівень навантаження є індивідуальним і відображає відхилення від вашої оптимальної норми. 0% — це рекомендований рівень навантаження для вас.)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit_button_container">
+                        <button type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${hasTrainingPlan == true ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
+                        <button th:if="${(hasTrainingPlan == true)}" type="submit" id="buttonGoTraining" class="submit_button" >Розпочати тренування</button>
+                    </div>
+                </form>
+            </section>
+        </div>
     </div>
 
     <div th:class="${#authorization.expression('isAuthenticated()')} ? 'chat-container' : 'hidden'">
@@ -108,7 +164,8 @@
             </div>
             <div class="chat-input-container">
                 <div class="input-wrapper">
-                    <input type="text" id="generalChatInput" placeholder="Type a message..." maxlength="255" oninput="updateCharCount('generalChatInput','chatGeneralCount')">
+                    <input type="text" id="generalChatInput" placeholder="Type a message..." maxlength="255"
+                           oninput="updateCharCount('generalChatInput','chatGeneralCount')">
                     <div class="char-count" id="chatGeneralCount">0/255</div>
                 </div>
                 <button onclick="sendMessageToGeneral()">Send</button>
@@ -121,13 +178,17 @@
                 <button class="close-chat-btn" onclick="closeChat('userList')">X</button>
             </div>
             <div class="collapsible">
-                <button class="collapsible-header" onclick="toggleList('onlineUserListContent')" style="color: #007bff">ONLINE</button>
+                <button class="collapsible-header" onclick="toggleList('onlineUserListContent')" style="color: #007bff">
+                    ONLINE
+                </button>
                 <ul id="onlineUserListContent" class="collapsible-content">
                     <!-- Online user list items will be added here dynamically -->
                 </ul>
             </div>
             <div class="collapsible">
-                <button class="collapsible-header" onclick="toggleList('userListContent')" style="color: #676363">OFFLINE</button>
+                <button class="collapsible-header" onclick="toggleList('userListContent')" style="color: #676363">
+                    OFFLINE
+                </button>
                 <ul id="userListContent" class="collapsible-content">
                     <!-- Offline user list items will be added here dynamically -->
                 </ul>
@@ -144,12 +205,23 @@
             </div>
             <div class="chat-input-container">
                 <div class="input-wrapper">
-                    <input type="text" id="chatToUserInput" placeholder="Type a message..." maxlength="255" oninput="updateCharCount('chatToUserInput','charToUserCount')">
+                    <input type="text" id="chatToUserInput" placeholder="Type a message..." maxlength="255"
+                           oninput="updateCharCount('chatToUserInput','charToUserCount')">
                     <div class="char-count" id="charToUserCount">0/255</div>
                 </div>
                 <button onclick="sendMessageToUser()">Send</button>
             </div>
         </div>
+    </div>
+    <div id="mainOverlay" class="mainOverlay fade-in" onclick="closeOverlay()"></div>
+    <div id="adminList" class="admin-list fade-in" style="display: none">
+    </div>
+    <div id="socialMediaMenu" class="social-media-menu fade-in">
+        <ul>
+            <li><a href="https://t.me/yourtelegram" target="_blank">Telegram</a></li>
+            <li><a href="https://youtube.com/youryoutube" target="_blank">YouTube</a></li>
+            <!-- Додайте більше соц. мереж за потребою -->
+        </ul>
     </div>
 
 </main>

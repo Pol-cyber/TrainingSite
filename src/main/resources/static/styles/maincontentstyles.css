@@ -34,7 +34,7 @@
     display: flex;
     flex-direction: column;
     width: 75%;
-    height: 67%;
+    height: auto;
     background-color: #ebe7cc;
     align-items: center;
     padding: 10px;
@@ -51,6 +51,7 @@
     font-family: 'Times New Roman', sans-serif;
     font-size: 23px;
     transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
 }
 
 .menu-items a:hover {
@@ -75,11 +76,13 @@
 .settings-content {
     background-color: #ebe7cc;
     width: 72%;
-    height: 75%;
-    padding: 10px;
+    height: auto;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
+    position: absolute;
+    left: 28%;
+    padding: 10px 10px 30px 10px;
 }
 
 .settings-content h2 {
@@ -87,7 +90,7 @@
     border-radius: 50px;
     display: inline-block;
     padding: 10px 20px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     font-size: 30px;
 }
@@ -98,6 +101,7 @@
     margin-bottom: 30px;
     font-size: 23px;
     font-family: 'Times New Roman', sans-serif;
+    margin-top: 20px;
 }
 
 .form-section {
@@ -123,7 +127,7 @@ input[type="number"] {
     background-color: #1da332;
     color: white;
     border: none;
-    padding: 14px 30px;
+    padding: 14px 20px;
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -175,5 +179,167 @@ input[type="checkbox"] {
     transform: scale(2);
     margin: 5px;
 }
+
+/*Повідомлення про помилку*/
+.error-message{
+    top: 15%;
+}
+
+/* Секція створення графіку тренувань*/
+.tSchedule-form label {
+    font-size: 23px;
+    font-family: "Times New Roman", sans-serif;
+    margin-top: 0;
+}
+
+.form-section label.additionalInformation {
+    font-size: 16px;
+}
+
+
+.checkboxes {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.checkboxes label {
+    padding: 8px;
+    background: #f1f1f1;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+    user-select: none;
+}
+
+.checkboxes label:hover {
+    background: #d1e7dd;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 60%;
+}
+
+#sliderValue {
+    margin-bottom: 10px; /* Відступ між значенням і слайдером */
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#difficulty {
+    width: 100%;
+}
+
+.sliderAdditionalInformation{
+    width: 75%;
+}
+
+.submit_button_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+/* Основний стиль для виділення лейбла */
+.highlight-block {
+    font-weight: bold; /* Жирний текст */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Легка тінь */
+    text-align: center; /* Текст по центру */
+    width: auto;
+    display: inline-block;
+    padding-inline: 5px;
+    border-radius: 5px;
+}
+
+
+/* List Admin*/
+.admin-list {
+    position: fixed; /* Змінено на fixed для центрування на екрані */
+    z-index: 1001; /* Зберігаємо список адмінів поверх оверлею */
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: 65%;
+    max-width: 300px;
+    left: 50%; /* Центруємо по горизонталі */
+    top: 50%; /* Центруємо по вертикалі */
+    transform: translate(-50%, -50%); /* Зміщуємо на 50% ширини та висоти */
+}
+
+.admin-list button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-list button:hover {
+    background-color: #0056b3;
+}
+
+
+.mainOverlay {
+    display: none; /* Сховати оверлей за замовчуванням */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Напівпрозорий чорний фон */
+    z-index: 1000; /* Вищий z-index для перекриття контенту */
+}
+
+.admin-list p{
+    text-align: center; /* Центрує текст */
+    margin: 10px 0 15px 0; /* Додає відступи зверху і знизу для естетики */
+}
+
+
+/*Медіа меню*/
+.social-media-menu {
+    display: none; /* Спочатку приховано */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрування */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000; /* Поверх оверлея */
+}
+
+.social-media-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-media-menu ul li {
+    margin: 10px 0;
+}
+
+.social-media-menu ul li a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 21px;
+}
+
+/*.social-media-menu ul li a:hover {*/
+/*    text-decoration: none;*/
+/*}*/
 
 

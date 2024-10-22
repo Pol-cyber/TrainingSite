@@ -386,3 +386,34 @@ li:hover {
     justify-content: center;
     font-size: 12px;
 }
+
+/*Error message*/
+.error-message {
+    font-size: 18px;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    color: #ec3747;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 301;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.error-message.hide {
+    opacity: 0;
+}
+
+/* Анімація відкриття */
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

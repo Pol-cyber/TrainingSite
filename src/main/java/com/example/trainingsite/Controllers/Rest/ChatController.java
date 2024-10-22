@@ -1,5 +1,6 @@
 package com.example.trainingsite.Controllers.Rest;
 
+import com.example.trainingsite.Entity.DTO.UserDTO;
 import com.example.trainingsite.Entity.MessageGeneralChat;
 import com.example.trainingsite.Entity.MessageUserToUser;
 import com.example.trainingsite.repository.GeneralChatRepo;
@@ -28,10 +29,11 @@ public class ChatController {
         return generalChatRepo.findLast10Messages(pageable);
     }
 
-    @GetMapping(value = "/api/chat/toUser/last10")
+    @GetMapping("/api/chat/toUser/last10")
     public List<MessageUserToUser> getLast10UserToUserMessage(@RequestParam(name = "senderId") String senderId,@RequestParam(name = "receiverId") String receiverId){
         Pageable pageable = PageRequest.of(0,10);
         return mUserToUserRepo.findLast10MessagesBetweenUsers(senderId,receiverId,pageable);
     }
+
 }
 

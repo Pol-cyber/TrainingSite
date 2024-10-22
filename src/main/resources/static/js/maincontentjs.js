@@ -3,12 +3,14 @@ const logoImg = document.querySelector('#theme-toggle');
 const imgElement = document.querySelector('.full-screen-image');
 const logooverlay = document.querySelector('.overlay');
 const settingcontent = document.querySelector('.settings-content');
-const labelElement = document.querySelectorAll('label');
+// const labelElement = document.querySelectorAll('.changeStyle');
+const labelElement = document.querySelectorAll('.settings-content label:not(.checkboxes label)');
 const menuLink = document.querySelectorAll('.menu-link');
 const menuItems = document.querySelector('.menu-items');
+const sliderValue = document.querySelector('#sliderValue');
 
 // Перевірка збереженого стану теми при завантаженні сторінки
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
         document.body.classList.add('dark-theme');
@@ -18,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-logoImg.addEventListener('click', function() {
+logoImg.addEventListener('click', function () {
     document.body.classList.toggle('dark-theme');
     const currentTheme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
     if (currentTheme === 'dark') {
@@ -34,27 +36,30 @@ function applyLightTheme() {
     logooverlay.style.backgroundImage = 'linear-gradient(45deg, #bdd2ee, #4879bb)';
     settingcontent.style.backgroundImage = 'linear-gradient(to bottom right, #bdd2ee, #4879bb)';
     menuItems.style.backgroundImage = 'linear-gradient(to bottom right, #bdd2ee, #4879bb)';
+    sliderValue.style.color = "black";
     labelElement.forEach(label => {
         label.style.color = "black";
     });
     menuLink.forEach(menuLink => {
-        if(menuLink.style.color === "black"){
+        if (menuLink.style.color === "black") {
             menuLink.style.color = "white";
         } else {
             menuLink.style.color = "black";
         }
     });
 }
+
 function applyDarkTheme() {
     imgElement.src = '../images/nightStartLogo.jpg';
     logooverlay.style.backgroundImage = 'linear-gradient(45deg, #cecccc, #000000)';
     settingcontent.style.backgroundImage = 'linear-gradient(to bottom right, #ccbebe, #000000)';
     menuItems.style.backgroundImage = 'linear-gradient(to bottom right, #ccbebe, #000000)';
+    sliderValue.style.color = "white";
     labelElement.forEach(label => {
         label.style.color = "white";
     });
     menuLink.forEach(menuLink => {
-        if(menuLink.style.color === "white"){
+        if (menuLink.style.color === "white") {
             menuLink.style.color = "black";
         } else {
             menuLink.style.color = "white";
@@ -75,7 +80,7 @@ function showForm(menuItem) {
     if (lastClickedLink !== null) {
         lastClickedLink.style.textDecoration = "";
         lastClickedLink.style.pointerEvents = "auto";
-        if(localStorage.getItem('theme') === "dark"){
+        if (localStorage.getItem('theme') === "dark") {
             lastClickedLink.style.color = "white";
         } else {
             lastClickedLink.style.color = "black";
@@ -84,7 +89,7 @@ function showForm(menuItem) {
 
     clickedLink.style.textDecoration = "underline";
     clickedLink.style.pointerEvents = "none";
-    if(localStorage.getItem('theme') === "dark"){
+    if (localStorage.getItem('theme') === "dark") {
         clickedLink.style.color = "black";
     } else {
         clickedLink.style.color = "white";
@@ -92,17 +97,18 @@ function showForm(menuItem) {
 
     lastClickedLink = clickedLink;
 
-    if (menuItem === 'characteristic') {
-        document.querySelector('.characteristic').style.display = 'block';
-        document.querySelector('.tschedule').style.display = 'none';
-    } else if (menuItem === 'tschedule') {
-        document.querySelector('.characteristic').style.display = 'none';
-        document.querySelector('.tschedule').style.display = 'block';
+    if (menuItem === 'characteristics') {
+        document.querySelector('.characteristics-section').style.display = 'block';
+        document.querySelector('.tSchedule-section').style.display = 'none';
+    } else if (menuItem === 'tSchedule') {
+        document.querySelector('.characteristics-section').style.display = 'none';
+        document.querySelector('.tSchedule-section').style.display = 'block';
     }
 }
 
+// перевірка де знаходиться користувач
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Отримуємо значення параметра # з URL
     var hash = window.location.hash;
 
@@ -114,15 +120,160 @@ document.addEventListener("DOMContentLoaded", function() {
         // Очищаємо параметр # з URL
         history.replaceState(null, document.title, window.location.pathname);
     } else {
-        showForm('characteristic');
+        showForm('characteristics');
     }
 });
 
 function handleHash(hash) {
-    if (hash === "#tschedule") {
+    if (hash === "#tSchedule") {
         // Логіка для відображення графіка тренувань
-        showForm('tschedule');
+        showForm('tSchedule');
     } else {
-        showForm('characteristic');
+        showForm('characteristics');
     }
 }
+
+// Перевірка обраних типів вправ
+const checkboxesLabels = document.querySelectorAll('.checkboxesLabel');
+
+checkboxesLabels.forEach(label => {
+    label.addEventListener('change', function () {
+        // const meditationCheckbox = document.querySelector('input[name="meditation"]');
+        // const strengthCheckbox = document.querySelector('input[name="strength"]');
+        const errorMessage = document.querySelector('.error-message');
+        const tSchedule_Submit = document.getElementById("tSchedule_submitButton");
+
+        // Перевірка, чи обрано жоден з чекбоксів
+        if (areAllCheckboxesNoChecked()) {
+            showErrorMessage(errorMessage,'Потрібно вибрати щонайменше один елемент');
+            tSchedule_Submit.disabled = true;
+            tSchedule_Submit.style.backgroundColor = '#af4b4b'
+            // errorMessage.style.display = 'block'; // Показати повідомлення
+         } else {
+            // errorMessage.style.display = 'none'; // Сховати повідомлення, якщо хоча б один чекбокс вибрано
+            tSchedule_Submit.disabled = false;
+            tSchedule_Submit.style.backgroundColor = '#1da332'
+        }
+    });
+});
+
+function areAllCheckboxesNoChecked() {
+    return Array.from(checkboxesLabels).every(label => {
+        const checked = label.checked;
+        return !checked;  // Перевіряємо, чи чекбокс існує
+    });
+}
+
+
+
+function showErrorMessage(errorMessageElement,textError) {
+    setTimeout(function() {
+        // Змінюємо прозорість елементу на 0
+        errorMessageElement.textContent = textError;
+        errorMessageElement.style.opacity = '100';
+        // Після 0.5 секунд змінюємо висоту елементу на 0 і прибираємо його з потоку документу
+        setTimeout(function() {
+            errorMessageElement.style.opacity = '0';
+        }, 2000);
+    }, 500); // 4000 мілісекунд = 4 секунди
+}
+
+// Функціонал звернення в тех. підтримку
+let allAdminVariable = null;
+var lastConnectedTime = null;
+
+function goToChatWithAdmin(){
+    const overlay = document.getElementById('mainOverlay');
+    let adminListContainer = document.getElementById('adminList');
+    if(lastConnectedTime != null && new Date().getTime() - lastConnectedTime > 20000){
+        allAdminVariable = null;
+    }
+    if(allAdminVariable === null) {
+        fetch('/api/user/getAdminUserName/' + authorizedUser)
+            .then(response => response.json())
+            .then(allAdmin => {
+                // Очищуємо контейнер для списку адмінів
+                adminListContainer.innerHTML = ''; // Очищення попереднього вмісту
+
+                const message = document.createElement('p');
+                message.innerText = 'Оберіть адміністратора до якого бажаєте звернутись';
+                adminListContainer.appendChild(message);
+
+                // Створюємо кнопку або список для кожного адміна
+                if (allAdmin.length === 0) {
+                    // Якщо список порожній, показуємо повідомлення
+                    const errorMessage = document.querySelector('.error-message');
+                    showErrorMessage(errorMessage, 'Немає доступних адміністраторів');
+                } else {
+                    allAdmin.forEach(admin => {
+                        let adminButton = document.createElement('button');
+                        adminButton.innerText = admin.username +" ("+admin.status+")";
+                        adminButton.onclick = function () {
+                            closeOverlay();
+                            openChatWithUser(admin.username); // Відкриття чату з обраним адміном
+                        };
+                        adminListContainer.appendChild(adminButton);
+                    });
+                    lastConnectedTime = new Date().getTime();
+                    allAdminVariable = allAdmin;
+                    adminListContainer.style.display='block';
+                    overlay.style.display = 'block';
+                }
+            })
+            .catch(error => console.error('Error fetching messages:', error));
+    } else {
+        adminListContainer.style.display='block';
+        overlay.style.display = 'block';
+    }
+}
+
+function closeOverlay() {
+    let adminListContainer = document.getElementById('adminList');
+    const overlay = document.getElementById('mainOverlay');
+    overlay.style.display = 'none'; // Сховати оверлей
+    adminListContainer.style.display = 'none';
+    const socialMediaMenu = document.getElementById('socialMediaMenu');
+    socialMediaMenu.style.display = 'none';
+}
+
+// Медіа меню
+function showAllMedia() {
+    // Показати оверлей і меню
+    const overlay = document.getElementById('mainOverlay');
+    const socialMediaMenu = document.getElementById('socialMediaMenu');
+
+    overlay.style.display = 'block';
+    socialMediaMenu.style.display = 'block';
+}
+
+// Відправка характеристики за допомогою fetch
+document.getElementById('characteristicForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Зупинити стандартну подію відправки форми
+
+    const formData = new FormData(this); // Збираємо дані з форми
+    const dataObject = {};
+
+    // Перетворюємо FormData на звичайний об'єкт
+    formData.forEach((value, key) => {
+        dataObject[key] = value;
+    });
+
+    fetch('/api/user/characteristic', {
+        method: 'POST', // Метод запиту
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': dataObject["_csrf"]
+        },
+        body: JSON.stringify(dataObject) // Перетворюємо дані у формат JSON
+    })
+        .then(response =>  {
+            if(response.ok){
+                // Обробляємо відповідь
+                alert("Успішно збережено");
+            } else {
+                // Обробляємо відповідь
+                alert("Проблема");
+            }
+        })
+        .catch(error => console.error('Помилка запиту:', error));
+});

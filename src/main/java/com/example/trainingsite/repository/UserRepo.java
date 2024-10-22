@@ -27,6 +27,9 @@ public interface UserRepo extends CrudRepository<User,String> {
 
     @Query("SELECT u.email FROM User u WHERE u.newsletterSub = true")
     List<String> getEmailsByNewsletterSubIsTrue();
+
+    @Query("SELECT u FROM User u WHERE u.role = 'ROLE_ADMIN' AND u.username <> :currentUserName")
+    List<User> getAllAdminUsers(@Param("currentUserName") String currentUserName);
 }
 
 

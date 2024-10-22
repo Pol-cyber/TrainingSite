@@ -175,6 +175,18 @@
     margin-left: 5px;
 }
 
+.socialIcon {
+    text-decoration: none; /* Без підкреслення */
+    color: #333; /* Колір іконки */
+    transition: transform 0.3s; /* Анімація при наведенні */
+}
+
+.socialIcon:hover {
+    transform: scale(1.15);
+}
+
+
+
 /*SECTION Data NEWS*/
 
 .newsDataSection {
@@ -449,25 +461,25 @@
 
 
 /*error*/
-.error-message {
-    font-size: 18px;
-    position: fixed;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #ffffff;
-    color: #ec3747;
-    font-weight: bold;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 301;
-    opacity: 1;
-    transition: opacity 0.5s ease;
-}
+/*.error-message {*/
+/*    font-size: 18px;*/
+/*    position: fixed;*/
+/*    top: 20%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    background-color: #ffffff;*/
+/*    color: #ec3747;*/
+/*    font-weight: bold;*/
+/*    padding: 10px;*/
+/*    border-radius: 5px;*/
+/*    z-index: 301;*/
+/*    opacity: 1;*/
+/*    transition: opacity 0.5s ease;*/
+/*}*/
 
-.error-message.hide {
-    opacity: 0;
-}
+/*.error-message.hide {*/
+/*    opacity: 0;*/
+/*}*/
 
 
 /*register */

@@ -25,7 +25,7 @@
                     <a class="nav_link" href="#register_Section">Зареєструватись</a>
                 </div>
                 <div th:class="${#authorization.expression('isAuthenticated()')} ? 'nav_link' : 'hidden'" >
-                    <a class="nav_link" href="/content#tschedule">Графік тренувань</a>
+                    <a class="nav_link" href="/content#tSchedule">Графік тренувань</a>
                     <a class="nav_link" style="pointer-events: none;" >|</a>
                     <div class="dropdown">
                         <p id="authorizeUserName" class="dropbtn" th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">Username</p>
@@ -49,15 +49,6 @@
         <div th:if="${errorMessage}" class="error-message">
             <p th:text="${errorMessage}"></p>
         </div>
-        <!-- Успішне повідомлення -->
-        <div th:if="${param.registerSuccess}" class="error-message">
-            <p >Реєстрація пройшла успішно!</p>
-        </div>
-
-        <!-- Повідомлення про помилку -->
-        <div th:if="${param.registerError}" class="error-message">
-            <p >Виникла помилка під час реєстрації. Спробуйте ще раз.</p>
-        </div>
 
         <section class="newsLogoSection">
             <div class="logoContainer">
@@ -65,9 +56,8 @@
             </div>
             <div class="socialContainer">
                 <div class="overlayNews"></div>
-                <div class="socialIcon telegram"></div>
-                <div class="socialIcon youtube"></div>
-                <!-- Додайте інші соціальні мережі за потреби -->
+                <a href="https://telegram.org" target="_blank" class="socialIcon telegram"></a>
+                <a href="https://www.youtube.com" target="_blank" class="socialIcon youtube"></a>
             </div>
         </section>
         <section class="newsDataSection">
@@ -91,7 +81,7 @@
             </div>
         </section>
 
-        <section id="loginSection" class="hidden" >
+        <section id="loginSection" class="hidden fade-in" >
             <div id="loginForm" class="login_form">
                 <form id="loginProcess" th:action="@{/authenticate}" method="post">
                     <label for="username">Ім'я користувача:</label>
@@ -107,7 +97,7 @@
             </div>
         </section>
 
-        <section id="registerSection" class="hidden">
+        <section id="registerSection" class="hidden fade-in">
             <div id="registerForm" class="register_form">
                 <form id="registrationForm" th:action="@{/register}" method="post" enctype="multipart/form-data">
 <!--                    Spring security in thymeleaf автоматично додає токен-->
@@ -141,7 +131,7 @@
             </div>
         </section>
 
-        <section id="addNewsSection" class="hidden">
+        <section id="addNewsSection" class="hidden fade-in">
             <div id="addNewsForm" class="news_form">
                 <form id="newsForm" th:action="@{/news/add}" method="post" enctype="multipart/form-data">
                     <!-- Spring Security in Thymeleaf automatically adds the token -->
@@ -173,7 +163,7 @@
 
 
         <!-- Оверлей -->
-        <div id="overlayEnter" class="hidden"></div>
+        <div id="overlayEnter" class="hidden fade-in"></div>
 
         <div th:class="${#authorization.expression('isAuthenticated()')} ? 'chat-container' : 'hidden'">
             <button class="open-chat-btn" onclick="showChat()">Open Chat</button>

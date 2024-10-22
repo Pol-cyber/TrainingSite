@@ -362,6 +362,7 @@ function sendMessageToUser() {
         chatInput.value = "";
         chatContent.scrollTop = chatContent.scrollHeight;
     }
+    updateCharCount('chatToUserInput','charToUserCount')
 }
 
 
