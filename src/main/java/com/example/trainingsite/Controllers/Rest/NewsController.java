@@ -42,7 +42,9 @@ public class NewsController {
             News news = new News();
             news.setTitle(title);
             news.setText(text);
-            news.setLink(link);
+            if(link != null && !link.isEmpty()){
+                news.setLink(link);
+            }
             if(file.getBytes().length > 0){
                 news.setImage(file.getBytes());
             }

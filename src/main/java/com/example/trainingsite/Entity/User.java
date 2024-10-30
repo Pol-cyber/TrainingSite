@@ -51,6 +51,9 @@ public class User implements UserDetails, Serializable {
     @OneToOne(mappedBy = "user")
     private UserCharacteristic userCharacteristic;
 
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
+    private List<WorkoutPlan> workoutPlan = new ArrayList<>();
+
     @Override
     public String toString() {
         return "User{" +

@@ -140,12 +140,11 @@ checkboxesLabels.forEach(label => {
     label.addEventListener('change', function () {
         // const meditationCheckbox = document.querySelector('input[name="meditation"]');
         // const strengthCheckbox = document.querySelector('input[name="strength"]');
-        const errorMessage = document.querySelector('.error-message');
         const tSchedule_Submit = document.getElementById("tSchedule_submitButton");
 
         // Перевірка, чи обрано жоден з чекбоксів
         if (areAllCheckboxesNoChecked()) {
-            showErrorMessage(errorMessage,'Потрібно вибрати щонайменше один елемент');
+            showErrorMessage(null,'Потрібно вибрати щонайменше один елемент',"ERROR");
             tSchedule_Submit.disabled = true;
             tSchedule_Submit.style.backgroundColor = '#af4b4b'
             // errorMessage.style.display = 'block'; // Показати повідомлення
@@ -162,20 +161,6 @@ function areAllCheckboxesNoChecked() {
         const checked = label.checked;
         return !checked;  // Перевіряємо, чи чекбокс існує
     });
-}
-
-
-
-function showErrorMessage(errorMessageElement,textError) {
-    setTimeout(function() {
-        // Змінюємо прозорість елементу на 0
-        errorMessageElement.textContent = textError;
-        errorMessageElement.style.opacity = '100';
-        // Після 0.5 секунд змінюємо висоту елементу на 0 і прибираємо його з потоку документу
-        setTimeout(function() {
-            errorMessageElement.style.opacity = '0';
-        }, 2000);
-    }, 500); // 4000 мілісекунд = 4 секунди
 }
 
 // Функціонал звернення в тех. підтримку
@@ -202,8 +187,7 @@ function goToChatWithAdmin(){
                 // Створюємо кнопку або список для кожного адміна
                 if (allAdmin.length === 0) {
                     // Якщо список порожній, показуємо повідомлення
-                    const errorMessage = document.querySelector('.error-message');
-                    showErrorMessage(errorMessage, 'Немає доступних адміністраторів');
+                    showErrorMessage(null, 'Немає доступних адміністраторів',"ERROR");
                 } else {
                     allAdmin.forEach(admin => {
                         let adminButton = document.createElement('button');
@@ -254,9 +238,17 @@ document.getElementById('characteristicForm').addEventListener('submit', functio
     const dataObject = {};
 
     // Перетворюємо FormData на звичайний об'єкт
+    const healthConditions = [];
     formData.forEach((value, key) => {
-        dataObject[key] = value;
+        if (key === 'healthConditions') {
+            healthConditions.push(value); // Додаємо всі вибрані чекбокси до масиву
+        } else {
+            dataObject[key] = value; // Інші поля
+        }
     });
+
+    // Додаємо масив тренувань до dataObject
+    dataObject['healthConditions'] = healthConditions;
 
     fetch('/api/user/characteristic', {
         method: 'POST', // Метод запиту
@@ -269,10 +261,56 @@ document.getElementById('characteristicForm').addEventListener('submit', functio
         .then(response =>  {
             if(response.ok){
                 // Обробляємо відповідь
-                alert("Успішно збережено");
+                document.getElementById("characteristicsButton").textContent = "Оновити характеристику";
+                showErrorMessage(null,"Успішно збережено","NON_ERROR");
             } else {
                 // Обробляємо відповідь
-                alert("Проблема");
+                response.text().then(errorMessage => {
+                    showErrorMessage(null, errorMessage, "ERROR");
+                });
+            }
+        })
+        .catch(error => console.error('Помилка запиту:', error));
+});
+
+
+// Створення графіку тренувань
+document.getElementById('tScheduleForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Зупинити стандартну подію відправки форми
+
+    const formData = new FormData(this); // Збираємо дані з форми
+    const dataObject = {};
+
+    // Перетворюємо FormData на звичайний об'єкт
+    const trainingTypes = [];
+    formData.forEach((value, key) => {
+        if (key === 'trainingTypes') {
+            trainingTypes.push(value); // Додаємо всі вибрані чекбокси до масиву
+        } else {
+            dataObject[key] = value; // Інші поля
+        }
+    });
+
+    // Додаємо масив тренувань до dataObject
+    dataObject['trainingTypes'] = trainingTypes;
+
+    fetch('/api/workout/create', {
+        method: 'POST', // Метод запиту
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': dataObject["_csrf"]
+        },
+        body: JSON.stringify(dataObject) // Перетворюємо дані у формат JSON
+    })
+        .then(response =>  {
+            if(response.ok){
+                // Обробляємо відповідь
+                showErrorMessage(null,"Успішно збережено","NON_ERROR");
+            } else {
+                // Обробляємо відповідь
+                response.text().then(errorMessage => {
+                    showErrorMessage(null, errorMessage, "ERROR");
+                });
             }
         })
         .catch(error => console.error('Помилка запиту:', error));

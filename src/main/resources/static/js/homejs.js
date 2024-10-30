@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const overlay = document.getElementById('overlayEnter');
     const addNewsLink = document.querySelector('.nav_link[href="#add_News"]')
     const addNewsForm = document.getElementById('addNewsSection');
+    const passwordField = document.getElementById('password');
 
     registerLink.addEventListener('click', function(event) {
         overlay.classList.remove('hidden');
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loginLink.addEventListener('click', function(event) {
         overlay.classList.remove('hidden');
+        passwordField.value = '';
         showElement(loginForm);
     });
 
@@ -149,7 +151,7 @@ function updateLabel(fileInputText,fileLabelText,maxSizeMB,pixel) {
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         if (file.size > maxSizeMB * 1000 * 1024) { // 1 MB (конвертуємо в байти)
-            alert('Зображення повинно бути менше '+maxSizeMB+' MB');
+            showErrorMessage(null,'Зображення повинно бути менше '+maxSizeMB+' MB',"ERROR");
             fileInput.value = ''; // Очищаємо значення введення
             fileLabel.textContent = 'Оберіть зображення';
             return;
@@ -157,7 +159,7 @@ function updateLabel(fileInputText,fileLabelText,maxSizeMB,pixel) {
         const img = new Image();
         img.onload = function() {
             if (this.width > pixel || this.height > pixel) {
-                alert('Зображення повинно мати розмір не більше '+pixel+'x'+pixel+' пікселів');
+                showErrorMessage(null,'Зображення повинно мати розмір не більше '+pixel+'x'+pixel+' пікселів',"ERROR");
                 fileInput.value = ''; // Очищаємо значення введення
                 fileLabel.textContent = 'Оберіть зображення';
                 return;
@@ -191,17 +193,17 @@ document.getElementById('registrationForm').addEventListener('submit', function(
             if (response.success) {
                 history.pushState({}, '', '#login_Section');
                 document.getElementById('swap_to_login').click();
-                alert('Ви успішно зареєстровані!');
+                showErrorMessage(null,'Ви успішно зареєстровані!',"NON_ERROR");
             } else {
-                alert('Помилка: ' + response.message);
+                showErrorMessage(null,'Помилка: ' + response.message,"ERROR");
             }
         } else {
-            alert('Сталася помилка під час відправки форми.');
+            showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
         }
     };
     xhr.onerror = function() {
         // Обробити помилку
-        alert('Сталася помилка під час відправки форми.');
+        showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
     };
 
     xhr.send(formData);
@@ -223,13 +225,13 @@ document.getElementById('newsForm').addEventListener('submit', function(event) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            alert('Новину успішно додано - обновіть сторінку.');
+            showErrorMessage(null,'Новину успішно додано - обновіть сторінку.',"NON_ERROR");
         } else {
-            alert('Сталася помилка під час відправки форми.');
+            showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
         }
     };
     xhr.onerror = function() {
-        alert('Сталася помилка під час відправки форми.');
+        showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
     };
 
     xhr.send(formData);
@@ -254,8 +256,40 @@ function confirmDelete(element) {
                     // location.reload(); // або видалити елемент з DOM
                     document.querySelector(`.slide [data-id="${newsId}"]`).parentElement.remove();
                 } else {
-                    alert('Помилка при видаленні новини.');
+                    showErrorMessage(null,'Помилка при видаленні новини.',"ERROR");
                 }
             });
     }
 }
+
+
+// логін
+document.getElementById('loginForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+    fetch('/authenticate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRF-TOKEN': csrfToken
+        },
+        body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Парсимо JSON для отримання redirectUrl
+            } else if (response.status === 401) {
+                showErrorMessage(null, "Невірний логін або пароль");
+            }
+        })
+        .then(data => {
+            if (data && data.redirectUrl) {
+                window.location.href = data.redirectUrl; // Перенаправлення користувача
+            }
+        })
+        .catch(error => console.error('Помилка запиту:', error));
+});

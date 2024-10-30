@@ -25,7 +25,7 @@
 </header>
 
 <main>
-    <p class="additionalInformation error-message" style="opacity: 0">Помилка</p>
+    <p class="popUpMessage" style="opacity: 0">Повідомлення</p>
 
     <p id="authorizeUserName" style="display: none" th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">Username</p>
     <div class="container">
@@ -53,56 +53,66 @@
                     <h2>Характеристики</h2>
                     <div class="form-content">
                         <div class="form-section">
-                            <label for="age">Вік:</label>
-                            <input type="number" id="age" name="age" value="22">
                             <label for="weight">Вага (кг):</label>
-                            <input type="number" id="weight" name="weight" value="67">
+                            <input type="number" id="weight" name="weight" th:value="${characteristics != null ? characteristics.weight : 50}">
+
                             <label for="height">Ріст (см):</label>
-                            <input type="number" id="height" name="height" value="181">
+                            <input type="number" id="height" name="height" th:value="${characteristics != null ? characteristics.height : 170}">
+
+                            <label for="asthma">Респіраторні проблеми або астма?</label>
+                            <input type="checkbox" id="asthma" name="healthConditions" value="Asthma" th:checked="${characteristics != null and characteristics.healthConditions.contains('Asthma')}">
+
                             <label for="heartProblems">Проблеми із серцем?</label>
-                            <input type="checkbox" id="heartProblems" name="heartProblems">
+                            <input type="checkbox" id="heartProblems" name="healthConditions" value="Heart problems" th:checked="${characteristics != null and characteristics.healthConditions.contains('Heart problems')}">
                         </div>
+
                         <div class="divider"></div>
+
                         <div class="form-section">
                             <label for="gender">Стать:</label>
                             <div class="styled-select">
                                 <select id="gender" name="gender">
-                                    <option value="Чоловік" selected>Чоловік</option>
-                                    <option value="Жінка">Жінка</option>
+                                    <option value="Male" th:selected="${characteristics != null and characteristics.gender == 'Male'}">Чоловік</option>
+                                    <option value="Female" th:selected="${characteristics != null and characteristics.gender == 'Female'}">Жінка</option>
                                 </select>
                             </div>
+
                             <label for="trainingGoal">Мета тренування:</label>
                             <div class="styled-select">
                                 <select id="trainingGoal" name="trainingGoal">
-                                    <option value="НабірМ" selected>Набір м'язової маси</option>
-                                    <option value="ВтратаВ">Втрата ваги</option>
-                                    <option value="ПідтримкаФорми">Підтримка форми</option>
-                                    <option value="Реабілітація">Реабілітація</option>
+                                    <option value="Build muscle" th:selected="${characteristics != null and characteristics.trainingGoal == 'Build muscle'}">Набір м'язової маси</option>
+                                    <option value="Lose weight" th:selected="${characteristics != null and characteristics.trainingGoal == 'Lose weight'}">Втрата ваги</option>
+                                    <option value="Form support" th:selected="${characteristics != null and characteristics.trainingGoal == 'Form support'}">Підтримка форми</option>
+                                    <option value="Rehabilitation" th:selected="${characteristics != null and characteristics.trainingGoal == 'Rehabilitation'}">Реабілітація</option>
                                 </select>
                             </div>
+
                             <label for="fitnessLevel">Рівень фізичної підготовки:</label>
                             <div class="styled-select">
                                 <select id="fitnessLevel" name="fitnessLevel">
-                                    <option value="Початківець" selected>Початківець</option>
-                                    <option value="Досвідчений">Досвідчений</option>
+                                    <option value="Beginner" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Beginner'}">Початківець</option>
+                                    <option value="Intermediate" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Intermediate'}">Проміжний</option>
+                                    <option value="Advanced" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Advanced'}">Досвідчений</option>
                                 </select>
                             </div>
+
                             <label for="obesity">Присутнє ожиріння?</label>
-                            <input type="checkbox" id="obesity" name="obesity">
+                            <input type="checkbox" id="obesity" name="healthConditions" value="Obesity" th:checked="${characteristics != null and characteristics.healthConditions.contains('Obesity')}">
                         </div>
                     </div>
-                    <button class="submit_button" type="submit" th:text="${haveCharacteristics == true ? 'Оновити характеристику' : 'Підтвердити характеристику'}">Підтвердити</button>
+
+                    <button id="characteristicsButton" class="submit_button" type="submit" th:text="${characteristics != null ? 'Оновити характеристику' : 'Підтвердити характеристику'}">Підтвердити характеристику</button>
                 </form>
             </section>
 
             <!-- Третя секція для створення графіку тренувань -->
             <section class="tSchedule-section">
-                <form class="tSchedule-form" action="/submitSchedule" method="post">
+                <form class="tSchedule-form" id="tScheduleForm" th:action="@{/api/workout/create}" method="post">
                     <h2>Мій графік</h2><br>
-                    <div th:if="${!(hasTrainingPlan == true)}" class="highlight-block">
+                    <div th:if="${!(characteristics != null)}" class="highlight-block">
                         <label>
-                            У вас ще не створено графік <br>
-                            Будь ласка заповніть відомості
+                            У вас ще не додано характеристику <br>
+                            Будь ласка заповніть відомості.
                         </label>
                     </div>
                     <div class="form-content">
@@ -111,15 +121,15 @@
                             <div class="checkboxes">
                                 <label>
                                     Медитація
-                                    <input class="checkboxesLabel" type="checkbox" name="meditation" checked>
+                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Meditation" checked>
                                 </label>
                                 <label>
                                     Силове навантаження
-                                    <input class="checkboxesLabel" type="checkbox" name="strength">
+                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Weight training">
                                 </label>
                                 <label>
                                     Кардіо
-                                    <input class="checkboxesLabel" type="checkbox" name="cardio">
+                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Cardio">
                                 </label>
                             </div>
                             <p class="additionalInformation error-message" style="display: none">Потрібно вибрати щонайменше один елемент</p>
@@ -128,23 +138,22 @@
                         <div class="divider"></div>
 
                         <div class="form-section">
-                            <label for="difficulty">Виберіть рівень % важкості для вас</label>
+                            <label for="daysPerWeek">К-сть занять в неділю - <output id="sliderValue">1</output></label>
                             <div class="slider-container">
-                                <div>
-                                    <output id="sliderValue">0</output> <label>%</label>
-                                </div>
-                                <input type="range" id="difficulty" name="difficulty" min="-100" max="100" value="0" oninput="sliderValue.value = this.value">
+                                <input type="range" id="daysPerWeek" name="daysPerWeek" min="1" max="7" value="0" oninput="sliderValue.value = this.value">
                             </div>
-                            <div class="sliderAdditionalInformation">
-                                <label class="additionalInformation">(Цей рівень навантаження є індивідуальним і відображає відхилення від вашої оптимальної норми. 0% — це рекомендований рівень навантаження для вас.)</label>
-                            </div>
+                            <label for="sessionDuration">Тривалість тренування (хв):</label>
+                            <input type="number" id="sessionDuration" name="sessionDuration" value="60">
+                            <label for="totalWeeks">Всього тижнів:</label>
+                            <input type="number" id="totalWeeks" name="totalWeeks" value="4">
                         </div>
                     </div>
 
                     <div class="submit_button_container">
-                        <button type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${hasTrainingPlan == true ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
-                        <button th:if="${(hasTrainingPlan == true)}" type="submit" id="buttonGoTraining" class="submit_button" >Розпочати тренування</button>
+                        <button th:if="${characteristics != null}" type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${hasTrainingPlan == true ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
+                        <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonDeleteTraining" class="delete_button" >Видалити графік</button>
                     </div>
+                    <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonGoTraining" class="submit_button" style="width: 54%">Розпочати тренування</button>
                 </form>
             </section>
         </div>

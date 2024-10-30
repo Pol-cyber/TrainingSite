@@ -104,12 +104,6 @@
     margin-top: 20px;
 }
 
-.form-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
 label {
     margin-bottom: 10px;
 }
@@ -137,6 +131,31 @@ input[type="number"] {
 
 .submit_button:hover {
     background-color: #1cc537;
+}
+
+.submit_button:active {
+    background-color: #16a12c; /* ще темніший при натисканні */
+    transform: scale(0.98); /* невелике зменшення розміру */
+}
+
+.delete_button {
+    background-color: #bc3939; /* червоний колір для попередження */
+    color: white; /* білий текст */
+    padding: 14px 20px; /* відступи всередині кнопки */
+    font-size: 18px;
+    border: none; /* без рамки */
+    border-radius: 10px; /* закруглені кути */
+    cursor: pointer; /* курсор у вигляді руки */
+    transition: background-color 0.3s ease; /* плавна зміна кольору */
+}
+
+.delete_button:hover {
+    background-color: #c10303; /* темніший червоний при наведенні */
+}
+
+.delete_button:active {
+    background-color: #9e0101; /* ще темніший при натисканні */
+    transform: scale(0.98); /* невелике зменшення розміру */
 }
 
 
@@ -167,6 +186,7 @@ input[type="number"] {
     text-align: center;
     margin-bottom: 20px;
     position: relative;
+    justify-content: space-between;
 }
 
 
@@ -177,11 +197,11 @@ input[type="number"] {
 
 input[type="checkbox"] {
     transform: scale(2);
-    margin: 5px;
+    margin: 5px 5px 15px 5px;
 }
 
 /*Повідомлення про помилку*/
-.error-message{
+.popUpMessage{
     top: 15%;
 }
 
@@ -203,6 +223,10 @@ input[type="checkbox"] {
     margin-top: 10px;
 }
 
+.tSchedule-section .form-section {
+    justify-content: flex-start;
+}
+
 .checkboxes label {
     padding: 8px;
     background: #f1f1f1;
@@ -211,6 +235,10 @@ input[type="checkbox"] {
     cursor: pointer;
     transition: background 0.3s;
     user-select: none;
+}
+
+.checkboxes input[type="checkbox"] {
+    margin: 5px;
 }
 
 .checkboxes label:hover {
@@ -244,6 +272,7 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: space-around;
     margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 /* Основний стиль для виділення лейбла */
@@ -341,5 +370,4 @@ input[type="checkbox"] {
 /*.social-media-menu ul li a:hover {*/
 /*    text-decoration: none;*/
 /*}*/
-
 

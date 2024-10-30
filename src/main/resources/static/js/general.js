@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         receiveMessageFromUser(text);
                         stompClient.send('/receive.specific', {}, JSON.stringify({ 'id': data.id}));
                     } else {
-                        alert("Вам надійшло повідомлення від іншого користувача.");
+                        showErrorMessage(null,"Вам надійшло повідомлення від іншого користувача.","NON_ERROR");
                     }
                 }
             });
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }));
         }, function (error) {
             console.error('Error connecting to WebSocket: ' + error);
-            alert('Could not connect to WebSocket. Please try again.');
+            showErrorMessage(null,'Could not connect to WebSocket. Please try again.',"ERROR");
         });
 
         socket.onclose = function() {
@@ -337,7 +337,7 @@ function sendMessageToUser() {
     let chatContent = document.getElementById('chatContent');
     let message = chatInput.value;
     if(message.length < 1){
-        alert("Пусті повідомлення забороняються.");
+        showErrorMessage(null,"Пусті повідомлення забороняються.","ERROR");
         return;
     }
     let receiver = checkWithWhoConversation();
@@ -371,7 +371,7 @@ function sendMessageToGeneral() {
     // let chatContent = document.getElementById('generalСhatContent');
     let message = chatInput.value;
     if(message.length < 1){
-        alert("Пусті повідомлення забороняються.");
+        showErrorMessage(null,"Пусті повідомлення забороняються.","ERROR");
         return;
     }
 
@@ -461,4 +461,25 @@ function toggleList(listId) {
     } else {
         list.style.display = "none";
     }
+}
+
+// Повідомлення про помилку
+function showErrorMessage(errorMessageElement,textError,type) {
+    if(errorMessageElement === null){
+        errorMessageElement = document.querySelector('.popUpMessage');
+    }
+    setTimeout(function() {
+        // Змінюємо прозорість елементу на 0
+        if(type === "NON_ERROR"){
+            errorMessageElement.style.color = '#26c546';
+        } else {
+            errorMessageElement.style.color = '#ec3747';
+        }
+        errorMessageElement.textContent = textError;
+        errorMessageElement.style.opacity = '100';
+        // Після 0.5 секунд змінюємо висоту елементу на 0 і прибираємо його з потоку документу
+        setTimeout(function() {
+            errorMessageElement.style.opacity = '0';
+        }, 2000);
+    }, 500); // 4000 мілісекунд = 4 секунди
 }

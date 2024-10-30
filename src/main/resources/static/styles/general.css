@@ -408,6 +408,25 @@ li:hover {
     opacity: 0;
 }
 
+.popUpMessage {
+    font-size: 18px;
+    position: fixed;
+    top: 9%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    color: #ec3747;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1400;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.popUpMessage.hide {
+    opacity: 0;
+}
 /* Анімація відкриття */
 .fade-in {
     animation: fadeIn 0.3s ease-in-out;
@@ -416,4 +435,9 @@ li:hover {
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
+}
+
+/*Стиль сповіщення*/
+.PopUpMessage {
+
 }
