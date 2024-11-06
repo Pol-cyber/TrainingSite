@@ -174,7 +174,7 @@ function goToChatWithAdmin(){
         allAdminVariable = null;
     }
     if(allAdminVariable === null) {
-        fetch('/api/user/getAdminUserName/' + authorizedUser)
+        fetch('/api/user/getAdminsUserName/' + authorizedUser)
             .then(response => response.json())
             .then(allAdmin => {
                 // Очищуємо контейнер для списку адмінів
@@ -212,12 +212,10 @@ function goToChatWithAdmin(){
 }
 
 function closeOverlay() {
-    let adminListContainer = document.getElementById('adminList');
-    const overlay = document.getElementById('mainOverlay');
-    overlay.style.display = 'none'; // Сховати оверлей
-    adminListContainer.style.display = 'none';
-    const socialMediaMenu = document.getElementById('socialMediaMenu');
-    socialMediaMenu.style.display = 'none';
+    document.getElementById('adminList').style.display = 'none';
+    document.getElementById('mainOverlay').style.display = 'none';
+    document.getElementById('socialMediaMenu').style.display = 'none';
+    document.getElementById('scheduleModal').style.display = 'none';
 }
 
 // Медіа меню
@@ -261,8 +259,7 @@ document.getElementById('characteristicForm').addEventListener('submit', functio
         .then(response =>  {
             if(response.ok){
                 // Обробляємо відповідь
-                document.getElementById("characteristicsButton").textContent = "Оновити характеристику";
-                showErrorMessage(null,"Успішно збережено","NON_ERROR");
+                showErrorMessage(null,"Успішно збережено. Будь ласка оновіть сторінку","NON_ERROR");
             } else {
                 // Обробляємо відповідь
                 response.text().then(errorMessage => {
@@ -315,3 +312,168 @@ document.getElementById('tScheduleForm').addEventListener('submit', function(eve
         })
         .catch(error => console.error('Помилка запиту:', error));
 });
+
+// список графіків
+let selectedPlan = null;
+
+function toggleModal() {
+    const modal = document.getElementById('scheduleModal');
+    const overlay = document.getElementById('mainOverlay');
+    const isVisible = modal.style.display === 'flex';
+
+    modal.style.display = isVisible ? 'none' : 'flex';
+    overlay.style.display = isVisible ? 'none' : 'block';
+    // Вимкнути кнопки, якщо план не вибрано
+    if (selectedPlan == null) {
+        document.getElementById('scheduleListButton').style.display = "none";
+    } else {
+        document.getElementById('scheduleListButton').style.display = "flex";
+    }
+}
+
+function selectPlan(div) {
+    // Знімаємо виділення з інших елементів
+    document.querySelectorAll('.training-plan-item').forEach(item => {
+        item.classList.remove('selected');
+        item.querySelector('.details').style.display = 'none';
+    });
+
+    // Встановлюємо вибір для поточного елемента
+    const planName = div.querySelector('#selectedPlanName').textContent;
+    if(planName === selectedPlan){
+          selectedPlan = null;
+          document.getElementById('scheduleListButton').style.display = "none";
+    } else {
+        div.classList.add('selected');
+        div.querySelector('.details').style.display = 'block';
+        if(selectedPlan == null){
+            selectedPlan = planName;
+            document.getElementById('scheduleListButton').style.display = "flex";
+        } else {
+            selectedPlan = planName;
+        }
+    }
+}
+
+function deletePlan() {
+    if (confirm("Ви дійсно хочете видалити план: " + selectedPlan + "?")) {
+        if(selectedPlan != null) {
+
+            const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+            fetch('/api/workout/delete/' + selectedPlan, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Обробляємо відповідь
+                        const trainingPlans = document.querySelectorAll(`.training-plan-item`);
+                        trainingPlans.forEach(planItem => {
+                            // Знаходимо span з ID selectedPlanName всередині поточного planItem
+                            const planNameSpan = planItem.querySelector('#selectedPlanName');
+
+                            // Перевіряємо, чи планNameSpan існує та чи містить потрібний текст
+                            if (planNameSpan && planNameSpan.textContent.trim() === selectedPlan) {
+                                planItem.remove(); // Видаляємо план
+                                selectedPlan = null;
+                                document.getElementById('scheduleListButton').style.display = "none";
+                            }
+                        });
+                        showErrorMessage(null, "Успішно видалено", "NON_ERROR");
+                    } else {
+                        // Обробляємо відповідь
+                        response.text().then(errorMessage => {
+                            showErrorMessage(null, errorMessage, "ERROR");
+                        });
+                    }
+                })
+                .catch(error => console.error('Помилка запиту:', error));
+        } else {
+            showErrorMessage(null,"Для видалення не обрано план тренування","ERROR")
+        }
+    }
+}
+
+function toggleDetails(div) {
+    const details = div.querySelector('.details');
+    details.style.display = details.style.display === 'none' ? 'block' : 'none';
+    selectPlan(div);
+}
+
+
+// демонстрація детелей плану
+function fetchWorkoutPlanDetails() {
+    const planName = document.getElementById("selectedPlanName").innerText;
+    fetch(`/api/workout/details/${planName}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('input[name="_csrf"]').value
+        }
+    })
+        .then(response => response.json())
+        .then(data => displayWorkoutDetails(data))
+        .catch(error => console.error('Error:', error));
+}
+
+function displayWorkoutDetails(workoutDays) {
+    // Clear any previous content
+    const workoutListModal = document.getElementById("workoutListModal");
+    workoutListModal.style.display = 'none';
+    const workoutDetailsModal = document.getElementById("workoutDetailsModal");
+    workoutDetailsModal.style.display = 'flex';
+    const detailsContainer = document.getElementById("workoutDetailsContainer");
+    detailsContainer.innerHTML = "";
+
+    workoutDays.forEach(day => {
+        // Контейнер для кожного дня
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("accordion");
+
+        // Заголовок дня
+        const dayTitle = document.createElement("h3");
+        dayTitle.textContent = day.day;
+        dayDiv.appendChild(dayTitle);
+
+        // Контейнер для вправ
+        const panel = document.createElement("div");
+        panel.classList.add("panel");
+
+        day.exercises.forEach(exercise => {
+            const exerciseItem = document.createElement("div");
+            exerciseItem.classList.add("exercise-item");
+
+            exerciseItem.innerHTML = `
+                <p><strong>Назва:</strong> ${exercise.name}</p>
+                <p><strong>Тривалість:</strong> ${exercise.duration || "N/A"}</p>
+                <p><strong>Повтори:</strong> ${exercise.repetitions || "N/A"}</p>
+                <p><strong>Сети:</strong> ${exercise.sets || "N/A"}</p>
+                <p><strong>Обладнання:</strong> ${exercise.equipment || "N/A"}</p>
+            `;
+
+            panel.appendChild(exerciseItem);
+        });
+
+        dayDiv.appendChild(panel);
+        detailsContainer.appendChild(dayDiv);
+
+        // Додаємо обробник події для розкриття і приховання панелі
+        dayDiv.addEventListener("click", function () {
+            const isVisible = panel.style.display === "block";
+            panel.style.display = isVisible ? "none" : "block";
+        });
+    });
+
+    // Show the modal or details section with the list of exercises
+    document.getElementById("workoutDetailsModal").style.display = 'block';
+}
+
+function displayWorkoutListModal(){
+    const workoutListModal = document.getElementById("workoutListModal");
+    workoutListModal.style.display = 'block';
+    const workoutDetailsModal = document.getElementById("workoutDetailsModal");
+    workoutDetailsModal.style.display = 'none';
+}

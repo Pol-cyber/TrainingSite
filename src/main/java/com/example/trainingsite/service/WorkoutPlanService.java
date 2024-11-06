@@ -5,6 +5,10 @@ import com.example.trainingsite.Entity.User;
 import com.example.trainingsite.Entity.WorkoutPlan;
 import com.example.trainingsite.repository.WorkoutPlanRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class WorkoutPlanService {
@@ -19,6 +23,7 @@ public class WorkoutPlanService {
         this.workoutPlanRepository = workoutPlanRepository;
     }
 
+    @Transactional
     public WorkoutPlan createAndSavePlan(WorkoutPlanDTO workPlanData, User user) throws Exception {
         // додаю дані з характеристики користувача
         workPlanData.setGoal(user.getUserCharacteristic().getTrainingGoal());
@@ -27,8 +32,20 @@ public class WorkoutPlanService {
         String apiResponse = apiWorkoutPlannerClientService.fetchWorkoutPlan(workPlanData,user.getUserCharacteristic());
         WorkoutPlan workoutPlan = workoutMapper.mapJsonToWorkoutPlan(apiResponse,workPlanData.getTrainingTypes());
 
+        WorkoutPlan.WorkoutPlanPK workoutPlanPK = new WorkoutPlan.WorkoutPlanPK();
+        workoutPlanPK.setPlanName(workPlanData.getPlanName());
+        workoutPlanPK.setUserUsername(user.getUsername());
+        workoutPlan.setWorkoutPlanPK(workoutPlanPK);
         workoutPlan.setUser(user);
-        user.getWorkoutPlan().add(workoutPlan);
+        user.getWorkoutPlans().add(workoutPlan);
         return workoutPlanRepository.save(workoutPlan);
+    }
+
+    public static List<WorkoutPlanDTO> getWorkoutPlanDTOs(List<WorkoutPlan> workoutPlans) {
+        List<WorkoutPlanDTO> workoutPlanDTOs = new ArrayList<>();
+        for (WorkoutPlan workoutPlan : workoutPlans) {
+            workoutPlanDTOs.add(new WorkoutPlanDTO(workoutPlan));
+        }
+        return workoutPlanDTOs;
     }
 }

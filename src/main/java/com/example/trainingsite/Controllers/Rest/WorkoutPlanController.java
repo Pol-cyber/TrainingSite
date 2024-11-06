@@ -4,16 +4,15 @@ package com.example.trainingsite.Controllers.Rest;
 import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
 
 import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.Entity.WorkoutDay;
 import com.example.trainingsite.Entity.WorkoutPlan;
+import com.example.trainingsite.repository.UserRepo;
+import com.example.trainingsite.repository.WorkoutPlanRepo;
 import com.example.trainingsite.service.WorkoutPlanService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -21,15 +20,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/workout")
 public class WorkoutPlanController {
 
     private final WorkoutPlanService workoutPlanService;
+    private final WorkoutPlanRepo workoutPlanRepo;
 
-    public WorkoutPlanController(WorkoutPlanService workoutPlanService) {
+    public WorkoutPlanController(WorkoutPlanService workoutPlanService, WorkoutPlanRepo workoutPlanRepo) {
         this.workoutPlanService = workoutPlanService;
+        this.workoutPlanRepo = workoutPlanRepo;
     }
 
 
@@ -39,7 +41,7 @@ public class WorkoutPlanController {
         try {
             User user = (User) authentication.getPrincipal();
             // Перевірка кількості планів
-            List<WorkoutPlan> userPlans = user.getWorkoutPlan();
+            List<WorkoutPlan> userPlans = user.getWorkoutPlans();
             if (userPlans.size() >= 3) {
                 return new ResponseEntity<>("К-сть графіків не може бути більше 3.\n Будь ласка видаліть один із минулих та повторіть запит.", HttpStatus.FORBIDDEN);
             }
@@ -66,5 +68,44 @@ public class WorkoutPlanController {
         return new ResponseEntity<>("Графік успішно створено", HttpStatus.OK);
     }
 
+
+    @DeleteMapping("/delete/{planName}")
+    public ResponseEntity<String> deleteWorkoutPlan(@PathVariable String planName,Authentication authentication) {
+        try{
+            User user = (User) authentication.getPrincipal();
+            if(user.getWorkoutPlans().size() == 1){
+                return new ResponseEntity<>("Ви не можете видалити єдиний доступний графік", HttpStatus.FORBIDDEN);
+            }
+
+            WorkoutPlan planToDelete = user.getWorkoutPlans().stream()
+                    .filter(plan -> plan.getWorkoutPlanPK().getPlanName().equals(planName))
+                    .findFirst()
+                    .orElse(null);
+
+            if (planToDelete == null) {
+                return new ResponseEntity<>("План не знайдено", HttpStatus.NOT_FOUND);
+            }
+
+            user.getWorkoutPlans().remove(planToDelete);
+
+            // Save changes to the user (cascade will handle deletion)
+            workoutPlanRepo.delete(planToDelete);
+        } catch (Exception e){
+            return new ResponseEntity<>("Помилка під час видалення графіку", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>("Графік успішно видалено", HttpStatus.OK);
+    }
+
+    @GetMapping("/details/{planName}")
+    public ResponseEntity<List<WorkoutDay>> getWorkoutPlanDetails(@PathVariable String planName, Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        WorkoutPlan.WorkoutPlanPK pk = new WorkoutPlan.WorkoutPlanPK(planName,user.getUsername());
+        Optional<WorkoutPlan> workoutPlan = workoutPlanRepo.findById(pk);
+        if (workoutPlan.isPresent()) {
+            List<WorkoutDay> workoutDays = workoutPlan.get().getWorkoutDays();
+            return new ResponseEntity<>(workoutDays, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
 
 }

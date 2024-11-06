@@ -10,6 +10,7 @@
 
 .user-image {
     width: 100%;
+    max-width: 300px;
     height: 30%;
     border-radius: 15%;
     background-size: cover;
@@ -34,12 +35,32 @@
     display: flex;
     flex-direction: column;
     width: 75%;
+    font-size: 23px;
     height: auto;
     background-color: #ebe7cc;
+    justify-content: center;
     align-items: center;
     padding: 10px;
     border-radius: 10px;
     box-shadow: inset 0 -1px 7px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 1300px) {
+    .menu-items {
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 1000px) {
+    .menu-items {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 750px) {
+    .menu-items {
+        font-size: 16px;
+    }
 }
 
 .menu-items a {
@@ -49,7 +70,6 @@
     padding: 8px 15px;
     border-radius: 7px;
     font-family: 'Times New Roman', sans-serif;
-    font-size: 23px;
     transition: background-color 0.3s, color 0.3s;
     cursor: pointer;
 }
@@ -60,15 +80,15 @@
 }
 
 .container {
-    width: 72%;
+    width: 70%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    height: 78vh;
+    height: auto;
     position: fixed;
-    bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 
@@ -80,9 +100,33 @@
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    position: absolute;
     left: 28%;
     padding: 10px 10px 30px 10px;
+}
+
+@media (max-width: 1000px) {
+    .container {
+        flex-direction: column;
+        width: 85%;
+    }
+    .user-menu {
+        flex-direction: row;
+        width: auto;
+        justify-content: space-between;
+        margin: 10px 0;
+    }
+    .menu-items {
+        width: 70%;
+        flex-direction: row;
+        padding: 5px;
+    }
+    .settings-content {
+        width: auto;
+    }
+    .user-image {
+        width: 35%;
+        max-width: 220px;
+    }
 }
 
 .settings-content h2 {
@@ -98,10 +142,22 @@
 .form-content {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     font-size: 23px;
     font-family: 'Times New Roman', sans-serif;
     margin-top: 20px;
+}
+
+@media (max-width: 1500px) {
+    .form-content {
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 900px) {
+    .form-content {
+        font-size: 18px;
+    }
 }
 
 label {
@@ -173,6 +229,12 @@ input[type="number"] {
     margin-bottom: 14px;
 }
 
+@media (max-width: 900px) {
+    .styled-select select {
+        font-size: 14px;
+    }
+}
+
 .styled-select select:focus {
     outline: none;
 }
@@ -200,14 +262,9 @@ input[type="checkbox"] {
     margin: 5px 5px 15px 5px;
 }
 
-/*Повідомлення про помилку*/
-.popUpMessage{
-    top: 15%;
-}
 
 /* Секція створення графіку тренувань*/
 .tSchedule-form label {
-    font-size: 23px;
     font-family: "Times New Roman", sans-serif;
     margin-top: 0;
 }
@@ -272,7 +329,38 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: space-around;
     margin-top: 20px;
-    margin-bottom: 30px;
+}
+
+.planName {
+    display: flex;
+    flex-direction: column;
+    font-size: 23px;
+    align-items: center;
+    margin: 5px 0;
+}
+
+@media (max-width: 1000px) {
+    .planName {
+        font-size: 21px;
+    }
+}
+
+.planName input[type="text"] {
+    width: 65%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 19px;
+    color: #333;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.planName input[type="text"]:focus {
+    border-color: #28a745;
+    box-shadow: inset 0 2px 6px rgba(0, 128, 0, 0.3);
+    outline: none;
 }
 
 /* Основний стиль для виділення лейбла */
@@ -284,6 +372,8 @@ input[type="checkbox"] {
     display: inline-block;
     padding-inline: 5px;
     border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: rgba(197, 0, 0, 0.1);
 }
 
 
@@ -367,7 +457,154 @@ input[type="checkbox"] {
     font-size: 21px;
 }
 
-/*.social-media-menu ul li a:hover {*/
-/*    text-decoration: none;*/
-/*}*/
+/*список графіків*/
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Центрування */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
+    width: 40%;
+    max-width: 500px;
+}
 
+.modal-content {
+    padding: 20px;
+    background: white;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* додавання тіні */
+    border-radius: 8px; /* закруглені кути */
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.modal-content li {
+    padding: 7px 0 5px 0;
+    cursor: default;
+    background: transparent;
+}
+
+.training-plan-item {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.training-plan-item:hover {
+    background-color: #f0f0f0; /* Змінює фон при наведенні */
+    transform: scale(1.02); /* Злегка збільшує розмір елемента */
+    cursor: pointer; /* Змінює курсор на вказівник */
+}
+
+.training-plan-item.selected {
+    background-color: #a8b3b6;
+    border-color: #4CAF50;
+}
+
+.details {
+    margin-top: 10px;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: left;
+}
+
+.close-button {
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+.no-bullets {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 6px;
+}
+
+.button-container {
+    display: flex;
+    gap: 30px;
+    justify-content: space-evenly;
+}
+
+#workoutDetailsContainer {
+    text-align: left;
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 10px 0;
+}
+
+#workoutDetailsContainer::-webkit-scrollbar {
+    width: 10px;
+}
+
+#workoutDetailsContainer::-webkit-scrollbar-thumb {
+    background-color: #1d1a6b;
+    border-radius: 4px;
+}
+
+#workoutDetailsContainer::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+/* Заголовок для дня */
+.accordion {
+    background-color: #4a90e2;
+    border-radius: 5px;
+    padding: 15px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s;
+    margin-bottom: 10px;
+}
+
+#workoutDetailsModal, #workoutListModal {
+    width: 100%;
+}
+
+.accordion:hover {
+    background-color: #357abd;
+}
+
+.accordion h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.panel {
+    padding: 10px 15px;
+    display: none;
+    background-color: #f9f9f9;
+    border-radius: 0 0 5px 5px;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+/* Блок з інформацією про вправу */
+.exercise-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.exercise-item p {
+    margin: 5px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.exercise-item p strong {
+    color: #555;
+}

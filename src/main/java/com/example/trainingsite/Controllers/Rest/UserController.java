@@ -57,7 +57,7 @@ public class UserController {
         return null;
     }
 
-    @GetMapping("/getAdminUserName/{currentUserName}")
+    @GetMapping("/getAdminsUserName/{currentUserName}")
     public List<UserDTO> getAdminUserName(@PathVariable("currentUserName") String currentUserName){
         List<User> list = userRepository.getAllAdminUsers(currentUserName);
         return list.stream().map(user -> new UserDTO.Builder().setUsername(user.getUsername()).setStatus(user.getStatus()).build()).toList();

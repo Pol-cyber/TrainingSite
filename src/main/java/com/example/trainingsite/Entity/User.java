@@ -2,13 +2,10 @@ package com.example.trainingsite.Entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLRestriction;
-import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,7 +49,7 @@ public class User implements UserDetails, Serializable {
     private UserCharacteristic userCharacteristic;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private List<WorkoutPlan> workoutPlan = new ArrayList<>();
+    private List<WorkoutPlan> workoutPlans = new ArrayList<>();
 
     @Override
     public String toString() {

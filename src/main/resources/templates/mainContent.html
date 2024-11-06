@@ -40,8 +40,7 @@
             <div class="menu-items">
                 <a  onclick="showForm('characteristics')" id="characteristics-link" class="menu-link">Характеристика</a>
                 <a  onclick="showForm('tSchedule')" id="tSchedule-link" class="menu-link">Тренування</a>
-                <a  onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Тех.
-                    підтримка</a>
+                <a  onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Підтримка</a>
                 <a  onclick="showAllMedia()" id="social-media-link" class="menu-link">Соц. мережі</a>
                 <!-- Додайте інші пункти меню, якщо потрібно -->
             </div>
@@ -105,15 +104,19 @@
                 </form>
             </section>
 
-            <!-- Третя секція для створення графіку тренувань -->
+            <!-- Третя секція для графіку тренувань -->
             <section class="tSchedule-section">
                 <form class="tSchedule-form" id="tScheduleForm" th:action="@{/api/workout/create}" method="post">
                     <h2>Мій графік</h2><br>
                     <div th:if="${!(characteristics != null)}" class="highlight-block">
                         <label>
-                            У вас ще не додано характеристику <br>
-                            Будь ласка заповніть відомості.
+                            У вас ще не додано характеристику!<br>
+                            Будь ласка заповніть відомості!
                         </label>
+                    </div>
+                    <div class="planName">
+                        <label for="planName">Введіть назву плану</label>
+                        <input type="text" id="planName" name="planName" value="Мій план">
                     </div>
                     <div class="form-content">
                         <div class="form-section">
@@ -149,15 +152,64 @@
                         </div>
                     </div>
 
-                    <div class="submit_button_container">
-                        <button th:if="${characteristics != null}" type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${hasTrainingPlan == true ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
-                        <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonDeleteTraining" class="delete_button" >Видалити графік</button>
-                    </div>
-                    <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonGoTraining" class="submit_button" style="width: 54%">Розпочати тренування</button>
-                </form>
+                    <div th:if="${characteristics != null or trainingPlans != null}" class="submit_button_container">
+                        <button th:if="${characteristics != null}" type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${trainingPlans != null ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
+<!--                        <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonDeleteTraining" class="delete_button" >Видалити графік</button>-->
+                        <button th:if="${(trainingPlans != null)}" type="button" class="submit_button" onclick="toggleModal()">Відкрити список графіків</button>
+                    </div></form>
+<!--                Доробити!!!!!!-->
             </section>
         </div>
     </div>
+    <div id="scheduleModal" class="modal fade-in" style="display: none;">
+        <div id="workoutListModal" >
+            <div class="modal-content" >
+                <h2>Список графіків</h2>
+                <ul class="no-bullets">
+                    <li th:each="trainingPlan : ${trainingPlans}">
+                        <div class="training-plan-item" onclick="toggleDetails(this)">
+                            <span id="selectedPlanName" th:text="${trainingPlan.planName}"></span>
+                            <!-- Секція для детальної інформації, що відображається лише при виборі -->
+                            <div class="details" style="display: none;">
+                                <p><strong>Мета:</strong> <span th:text="${trainingPlan.goal}"></span></p>
+                                <p><strong>Рівень підготовки:</strong> <span th:text="${trainingPlan.fitnessLevel}"></span>
+                                </p>
+
+                                <p>
+                                    <strong>Тривалість:</strong>
+                                    <span>
+                                     <span th:text="${trainingPlan.totalWeeks}">0</span> тижнів,
+                                     <span th:text="${trainingPlan.daysPerWeek}">0</span> днів на тиждень,
+                                     <span th:text="${trainingPlan.sessionDuration}">0</span> хвилин за сесію
+                                </span>
+                                </p>
+                                <p>
+                                    <strong>Типи тренувань:</strong>
+                                    <span th:each="type, iterStat : ${trainingPlan.trainingTypes}"
+                                          th:text="${type} + (iterStat.last ? '' : ', ')"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div id="scheduleListButton" class="button-container" style="display: none;">
+                    <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                    <button class="delete_button" onclick="deletePlan()">Видалити</button>
+                    <button class="submit_button"  onclick="fetchWorkoutPlanDetails()">Детальніше</button>
+                </div>
+            </div>
+        </div>
+        <div id="workoutDetailsModal" style="display: none;">
+            <div class="modal-content">
+                <h2>Деталі тренування</h2>
+                <div id="workoutDetailsContainer">
+
+                </div>
+                <button class="submit_button" onclick="displayWorkoutListModal()">Повернутись назад</button>
+            </div>
+        </div>
+    </div>
+
 
     <div th:class="${#authorization.expression('isAuthenticated()')} ? 'chat-container' : 'hidden'">
         <button class="open-chat-btn" onclick="showChat()">Open Chat</button>

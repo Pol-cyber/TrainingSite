@@ -54,6 +54,7 @@ public class SecurityConfig {
         return httpSecurity.authorizeHttpRequests(authorizationManagerRequestMatcherRegistry -> {
             authorizationManagerRequestMatcherRegistry.requestMatchers("/news/**").hasRole("ADMIN")
                     .requestMatchers("/content/**").authenticated()
+                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/**").permitAll();
         }).formLogin(httpSecurityFormLoginConfigurer -> {
             httpSecurityFormLoginConfigurer.loginPage("/")
