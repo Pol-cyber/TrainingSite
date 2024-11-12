@@ -41,7 +41,7 @@
                 <a  onclick="showForm('characteristics')" id="characteristics-link" class="menu-link">Характеристика</a>
                 <a  onclick="showForm('tSchedule')" id="tSchedule-link" class="menu-link">Тренування</a>
                 <a  onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Підтримка</a>
-                <a  onclick="showAllMedia()" id="social-media-link" class="menu-link">Соц. мережі</a>
+                <a  onclick="showAllMedia()" id="social-media-link" class="menu-link">Мережі</a>
                 <!-- Додайте інші пункти меню, якщо потрібно -->
             </div>
         </section>
@@ -161,6 +161,9 @@
             </section>
         </div>
     </div>
+    <div id="loadingScreen" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div> <!-- Спінер завантаження -->
+    </div>
     <div id="scheduleModal" class="modal fade-in" style="display: none;">
         <div id="workoutListModal" >
             <div class="modal-content" >
@@ -185,8 +188,9 @@
                                 </p>
                                 <p>
                                     <strong>Типи тренувань:</strong>
-                                    <span th:each="type, iterStat : ${trainingPlan.trainingTypes}"
-                                          th:text="${type} + (iterStat.last ? '' : ', ')"></span>
+                                    <span th:each="type, iterStat : ${trainingPlan.trainingTypes}">
+                                        <span th:text="${type + (iterStat.last ? '' : ', ')}"></span>
+                                    </span>
                                 </p>
                             </div>
                         </div>

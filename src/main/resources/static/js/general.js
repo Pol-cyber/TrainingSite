@@ -105,20 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function funcForConnection() {
         if(authorizedUser !== 'undefined') {
-            // if(sessionStorage.getItem("preventReductionOnRestartPage") === null){
-            //     sessionStorage.setItem("preventReductionOnRestartPage","true");
-            //     var number = +localStorage.getItem(authorizedUser.textContent)
-            //     if(number === 0){
-            //         number = 1;
-            //         changeStatus("online");
-            //     } else {
-            //         number++;
-            //         changeStatus("offline");
-            //     }
-            //     localStorage.setItem(authorizedUser.textContent,number);
-            // }
             var savedConnection = localStorage.getItem('beConnection');
-            if (!localStorage.getItem('beConnection')) {
+            if (savedConnection == null || !savedConnection.connected) {
                 setTimeout(connectWebSocket,100);
             }
             else {
@@ -140,74 +128,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // console.log(localStorage.getItem("habuma"));
 });
 
-
-// ПОХОЖЕ ДАНА ФУНКЦІЯ ПРИ ВИКЛЮЧЕННІ ВИКОНУЄТЬСЯ 2 РАЗИ ПІДРЯД МОЖНА ЗА ДОПОМОГОЮ СЕСІЇ
-// ЯКОСЬ ЗРОЗУМІТИ ЩО ВОНА ВИКОНУЄТЬСЯ ПІД РЯД І ЦЕ ОЗНАЧАЄ ВИКЛЮЧЕННЯ
-// window.onbeforeunload  = function() {
-//     // console.log(isPageHidden);
-//     sessionStorage.setItem("onBeforeUnloadFlag","true");
-//     console.log(sessionStorage.getItem("PageIsHidden"))
-//     if(sessionStorage.getItem("PageIsHidden") === "true"){
-//         // sessionStorage.setItem("onBeforeUnloadFlag","trueHidden");
-//         var number = parseInt(localStorage.getItem(authorizedUser.textContent),10)
-//         if(number === 1){
-//             localStorage.setItem(authorizedUser.textContent,0);
-//             changeStatus("offline");
-//         } else {
-//             localStorage.setItem(authorizedUser.textContent,10);
-//             changeStatus("online");
-//         }
-//     }
-//     // changeStatus("online");
-//     // if(localStorage.getItem("test") === null){
-//     //     localStorage.setItem("test",1)
-//     // } else {
-//     //     var n = localStorage.getItem("test");
-//     //     n++;
-//     //     localStorage.setItem("test",n)
-//     // }
-//     // console.log("TEST  "+localStorage.getItem("test"))
-//     // console.log(localStorage.getItem(authorizedUser.textContent));
-//     // if (authorizedUser.textContent !== 'undefined') {
-//     //     // Зменшуємо лічильник вкладок
-//     //     sessionStorage.removeItem("preventReductionOnRestartPage");
-//     //     var number = +localStorage.getItem(authorizedUser.textContent);
-//     //     console.log("Number is "+ number)
-//     //     if (number <= 1) {
-//     //         localStorage.removeItem(authorizedUser.textContent);
-//     //         console.log("WHGAHHTT777&&&");
-//     //         changeStatus("offline");
-//     //     } else {
-//     //         localStorage.setItem(authorizedUser.textContent, --number);
-//     //         console.log("Okey");
-//     //     }
-//     // }
-// };
-
-// document.addEventListener('visibilitychange', function() {
-//     if (document.visibilityState === 'hidden') {
-//         // Викликається, коли вкладка стає неактивною (наприклад, коли користувач перемикається на іншу вкладку або закриває браузер)
-//         sessionStorage.setItem("PageIsHidden","true");
-//         console.log("Set True PageISHiden");
-//     } else {
-//         sessionStorage.setItem("PageIsHidden","false");
-//         console.log("Set False")
-//         console.log(sessionStorage.getItem("preventReductionOnRestartPage"))
-//     }
-// });
-
-// function changeStatus(status) {
-//     var csrfToken = document.querySelector('input[name="_csrf"]').value;
-//
-//     fetch('/api/user/'+status, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRF-TOKEN': csrfToken
-//         },
-//         credentials: 'same-origin'
-//     })
-// }
 
 /// функцію при логауті з -1 ДОБАВИТИ?????!?!?!??!?!???!
 // Chat

@@ -21,6 +21,7 @@ import java.util.*;
 public class ApiWorkoutPlannerClientService {
 
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @Value("${api.workout.url}")
     private String apiUrl;
     @Value("${api.workout.key}")
@@ -51,8 +52,7 @@ public class ApiWorkoutPlannerClientService {
         requestBody.put("plan_duration_weeks", workPlanData.getTotalWeeks());
         requestBody.put("lang", "en");
 
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(requestBody);
+        String json = objectMapper.writeValueAsString(requestBody);
         HttpEntity<String> entity = new HttpEntity<>(json, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);

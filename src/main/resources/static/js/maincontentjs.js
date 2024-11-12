@@ -291,6 +291,9 @@ document.getElementById('tScheduleForm').addEventListener('submit', function(eve
     // Додаємо масив тренувань до dataObject
     dataObject['trainingTypes'] = trainingTypes;
 
+    // Показуємо екран завантаження
+    document.getElementById('loadingScreen').style.display = 'flex';
+
     fetch('/api/workout/create', {
         method: 'POST', // Метод запиту
         headers: {
@@ -300,6 +303,7 @@ document.getElementById('tScheduleForm').addEventListener('submit', function(eve
         body: JSON.stringify(dataObject) // Перетворюємо дані у формат JSON
     })
         .then(response =>  {
+            document.getElementById('loadingScreen').style.display = 'none';
             if(response.ok){
                 // Обробляємо відповідь
                 showErrorMessage(null,"Успішно збережено","NON_ERROR");
@@ -310,7 +314,10 @@ document.getElementById('tScheduleForm').addEventListener('submit', function(eve
                 });
             }
         })
-        .catch(error => console.error('Помилка запиту:', error));
+        .catch(error => {
+            document.getElementById('loadingScreen').style.display = 'none';
+            console.error('Помилка запиту:', error);
+        });
 });
 
 // список графіків

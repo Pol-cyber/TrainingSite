@@ -30,7 +30,7 @@ public class WorkoutPlanService {
         workPlanData.setFitnessLevel(user.getUserCharacteristic().getFitnessLevel());
 
         String apiResponse = apiWorkoutPlannerClientService.fetchWorkoutPlan(workPlanData,user.getUserCharacteristic());
-        WorkoutPlan workoutPlan = workoutMapper.mapJsonToWorkoutPlan(apiResponse,workPlanData.getTrainingTypes());
+        WorkoutPlan workoutPlan = workoutMapper.mapJsonToWorkoutPlan(apiResponse,workPlanData);
 
         WorkoutPlan.WorkoutPlanPK workoutPlanPK = new WorkoutPlan.WorkoutPlanPK();
         workoutPlanPK.setPlanName(workPlanData.getPlanName());
