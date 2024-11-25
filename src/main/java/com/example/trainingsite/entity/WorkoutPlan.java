@@ -1,6 +1,5 @@
-package com.example.trainingsite.Entity;
+package com.example.trainingsite.entity;
 
-import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;

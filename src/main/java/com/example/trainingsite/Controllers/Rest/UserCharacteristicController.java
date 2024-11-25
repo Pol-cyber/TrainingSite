@@ -1,7 +1,7 @@
 package com.example.trainingsite.Controllers.Rest;
 
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.UserCharacteristic;
+import com.example.trainingsite.entity.User;
+import com.example.trainingsite.entity.UserCharacteristic;
 import com.example.trainingsite.repository.CharacteristicRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

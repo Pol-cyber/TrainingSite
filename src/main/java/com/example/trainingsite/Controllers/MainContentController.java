@@ -1,9 +1,9 @@
 package com.example.trainingsite.Controllers;
 
 
-import com.example.trainingsite.Entity.DTO.CharacteristicDTO;
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.UserCharacteristic;
+import com.example.trainingsite.entity.DTO.CharacteristicDTO;
+import com.example.trainingsite.entity.User;
+import com.example.trainingsite.entity.UserCharacteristic;
 import com.example.trainingsite.service.WorkoutPlanService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

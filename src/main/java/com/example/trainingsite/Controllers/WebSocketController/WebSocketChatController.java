@@ -1,8 +1,8 @@
 package com.example.trainingsite.Controllers.WebSocketController;
 
 
-import com.example.trainingsite.Entity.MessageGeneralChat;
-import com.example.trainingsite.Entity.MessageUserToUser;
+import com.example.trainingsite.entity.MessageGeneralChat;
+import com.example.trainingsite.entity.MessageUserToUser;
 import com.example.trainingsite.repository.GeneralChatRepo;
 import com.example.trainingsite.repository.MUserToUserRepo;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class WebSocketController {
+public class WebSocketChatController {
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
@@ -37,12 +37,12 @@ public class WebSocketController {
     }
 
 
-    @MessageMapping("/receive.all")
-    public void receiveAll(MessageUserToUser messageUserToUser){
-        String senderId = messageUserToUser.getSenderId();
-        String receiverId = messageUserToUser.getReceiverId();
-        mUserToUserRepo.updateAllMessage(senderId,receiverId);
-    }
+//    @MessageMapping("/receive.all")
+//    public void receiveAll(MessageUserToUser messageUserToUser){
+//        String senderId = messageUserToUser.getSenderId();
+//        String receiverId = messageUserToUser.getReceiverId();
+//        mUserToUserRepo.updateAllMessage(senderId,receiverId);
+//    }
 
     @MessageMapping("/receive.specific")
     public void receiveSpecific(MessageUserToUser messageUserToUser){

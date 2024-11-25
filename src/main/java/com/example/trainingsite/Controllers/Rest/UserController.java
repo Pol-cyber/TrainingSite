@@ -1,21 +1,15 @@
 package com.example.trainingsite.Controllers.Rest;
 
-import com.example.trainingsite.Entity.DTO.UserDTO;
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.UserCharacteristic;
-import com.example.trainingsite.repository.CharacteristicRepo;
+import com.example.trainingsite.entity.DTO.UserDTO;
+import com.example.trainingsite.entity.User;
 import com.example.trainingsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")

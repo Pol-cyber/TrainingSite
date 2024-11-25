@@ -32,7 +32,7 @@
                         <div class="dropdown-content">
                             <a th:href="@{/content#characteristic}">Характеристика</a>
                             <a class="nav_link" href="#add_News" sec:authorize="hasAuthority('ROLE_ADMIN')">Добавити новину</a>
-                            <form th:action="@{/logout}" method="post">
+                            <form id="logoutForm" th:action="@{/logout}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit">Вийти</button>
                             </form>
@@ -231,7 +231,10 @@
     <img th:src="@{/images/nightStartLogo.jpg}" alt="Full Screen Image" class="full-screen-image">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-    <script type="text/javascript" th:src="@{/js/general.js}"></script>
+    <script type="text/javascript" th:src="@{/js/errorMessage.js}"></script>
+    <script type="text/javascript" th:src="@{/js/generalForChat.js}"></script>
+<!--    <script type="text/javascript" th:src="@{/js/chatWithoutSharedWorker.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/chatWithSharedWorker.js}"></script>
     <script type="text/javascript" th:src="@{/js/homejs.js}"></script>
 </body>
 </html>

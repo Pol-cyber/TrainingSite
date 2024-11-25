@@ -1,12 +1,11 @@
 package com.example.trainingsite.Controllers.Rest;
 
 
-import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
+import com.example.trainingsite.entity.DTO.WorkoutPlanDTO;
 
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.WorkoutDay;
-import com.example.trainingsite.Entity.WorkoutPlan;
-import com.example.trainingsite.repository.UserRepo;
+import com.example.trainingsite.entity.User;
+import com.example.trainingsite.entity.WorkoutDay;
+import com.example.trainingsite.entity.WorkoutPlan;
 import com.example.trainingsite.repository.WorkoutPlanRepo;
 import com.example.trainingsite.service.WorkoutPlanService;
 import org.springframework.http.HttpStatus;

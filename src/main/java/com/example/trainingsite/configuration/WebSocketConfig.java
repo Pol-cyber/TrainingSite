@@ -15,7 +15,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-
+    // Поля за замовчуванням замінюються значеннями із файлу конфігурації
     private String host = "localhost";
     private Integer port = 61613;
     private String username = "guest";
@@ -37,3 +37,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setSystemPasscode(password);
     }
 }
+

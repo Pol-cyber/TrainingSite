@@ -1,7 +1,7 @@
 package com.example.trainingsite.repository;
 
 
-import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.entity.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

@@ -1,9 +1,6 @@
-package com.example.trainingsite.Entity.DTO;
+package com.example.trainingsite.entity.DTO;
 
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.WorkoutPlan;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import com.example.trainingsite.entity.WorkoutPlan;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

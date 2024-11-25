@@ -1,7 +1,7 @@
-package com.example.trainingsite.Entity.DTO;
+package com.example.trainingsite.entity.DTO;
 
-import com.example.trainingsite.Entity.MessageUserToUser;
-import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.entity.MessageUserToUser;
+import com.example.trainingsite.entity.User;
 import lombok.Data;
 
 import java.util.HashMap;

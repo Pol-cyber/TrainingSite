@@ -1,6 +1,6 @@
 package com.example.trainingsite.repository;
 
-import com.example.trainingsite.Entity.MessageGeneralChat;
+import com.example.trainingsite.entity.MessageGeneralChat;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

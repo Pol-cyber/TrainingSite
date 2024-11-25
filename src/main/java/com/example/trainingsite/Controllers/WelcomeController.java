@@ -1,7 +1,7 @@
 package com.example.trainingsite.Controllers;
 
 
-import com.example.trainingsite.Entity.News;
+import com.example.trainingsite.entity.News;
 import com.example.trainingsite.repository.NewsRep;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

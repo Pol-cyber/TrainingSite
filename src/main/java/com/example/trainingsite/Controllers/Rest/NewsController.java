@@ -1,8 +1,7 @@
 package com.example.trainingsite.Controllers.Rest;
 
 
-import com.example.trainingsite.Entity.News;
-import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.entity.News;
 import com.example.trainingsite.configuration.EmailMessagingGateway;
 import com.example.trainingsite.repository.NewsRep;
 import com.example.trainingsite.repository.UserRepo;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/news")

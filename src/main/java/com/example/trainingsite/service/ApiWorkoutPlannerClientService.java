@@ -1,8 +1,8 @@
 package com.example.trainingsite.service;
 
-import com.example.trainingsite.Entity.DTO.Schedule;
-import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
-import com.example.trainingsite.Entity.UserCharacteristic;
+import com.example.trainingsite.entity.DTO.Schedule;
+import com.example.trainingsite.entity.DTO.WorkoutPlanDTO;
+import com.example.trainingsite.entity.UserCharacteristic;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -10,11 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.*;
 
 @Service

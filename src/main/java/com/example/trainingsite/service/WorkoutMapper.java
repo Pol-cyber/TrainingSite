@@ -1,15 +1,14 @@
 package com.example.trainingsite.service;
 
-import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
-import com.example.trainingsite.Entity.Exercise;
-import com.example.trainingsite.Entity.WorkoutDay;
-import com.example.trainingsite.Entity.WorkoutPlan;
+import com.example.trainingsite.entity.DTO.WorkoutPlanDTO;
+import com.example.trainingsite.entity.Exercise;
+import com.example.trainingsite.entity.WorkoutDay;
+import com.example.trainingsite.entity.WorkoutPlan;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 

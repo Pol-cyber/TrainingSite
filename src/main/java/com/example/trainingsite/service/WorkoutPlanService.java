@@ -1,8 +1,8 @@
 package com.example.trainingsite.service;
 
-import com.example.trainingsite.Entity.DTO.WorkoutPlanDTO;
-import com.example.trainingsite.Entity.User;
-import com.example.trainingsite.Entity.WorkoutPlan;
+import com.example.trainingsite.entity.DTO.WorkoutPlanDTO;
+import com.example.trainingsite.entity.User;
+import com.example.trainingsite.entity.WorkoutPlan;
 import com.example.trainingsite.repository.WorkoutPlanRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,22 +1,14 @@
 package com.example.trainingsite.Controllers.Rest;
 
 
-import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.entity.User;
 import com.example.trainingsite.repository.UserRepo;
 import lombok.Data;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @RestController

@@ -1,6 +1,6 @@
 package com.example.trainingsite.component;
 
-import com.example.trainingsite.Entity.User;
+import com.example.trainingsite.entity.User;
 import com.example.trainingsite.repository.UserRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
