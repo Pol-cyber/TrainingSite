@@ -151,7 +151,7 @@ function updateLabel(fileInputText,fileLabelText,maxSizeMB,pixel) {
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         if (file.size > maxSizeMB * 1000 * 1024) { // 1 MB (конвертуємо в байти)
-            showErrorMessage(null,'Зображення повинно бути менше '+maxSizeMB+' MB',"ERROR");
+            showPopUpMessage(null,'Зображення повинно бути менше '+maxSizeMB+' MB',"ERROR");
             fileInput.value = ''; // Очищаємо значення введення
             fileLabel.textContent = 'Оберіть зображення';
             return;
@@ -159,7 +159,7 @@ function updateLabel(fileInputText,fileLabelText,maxSizeMB,pixel) {
         const img = new Image();
         img.onload = function() {
             if (this.width > pixel || this.height > pixel) {
-                showErrorMessage(null,'Зображення повинно мати розмір не більше '+pixel+'x'+pixel+' пікселів',"ERROR");
+                showPopUpMessage(null,'Зображення повинно мати розмір не більше '+pixel+'x'+pixel+' пікселів',"ERROR");
                 fileInput.value = ''; // Очищаємо значення введення
                 fileLabel.textContent = 'Оберіть зображення';
                 return;
@@ -193,17 +193,17 @@ document.getElementById('registrationForm').addEventListener('submit', function(
             if (response.success) {
                 history.pushState({}, '', '#login_Section');
                 document.getElementById('swap_to_login').click();
-                showErrorMessage(null,'Ви успішно зареєстровані!',"NON_ERROR");
+                showPopUpMessage(null,'Ви успішно зареєстровані!',"NON_ERROR");
             } else {
-                showErrorMessage(null,'Помилка: ' + response.message,"ERROR");
+                showPopUpMessage(null,'Помилка: ' + response.message,"ERROR");
             }
         } else {
-            showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
+            showPopUpMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
         }
     };
     xhr.onerror = function() {
         // Обробити помилку
-        showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
+        showPopUpMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
     };
 
     xhr.send(formData);
@@ -225,13 +225,13 @@ document.getElementById('newsForm').addEventListener('submit', function(event) {
 
     xhr.onload = function() {
         if (xhr.status === 200) {
-            showErrorMessage(null,'Новину успішно додано - обновіть сторінку.',"NON_ERROR");
+            showPopUpMessage(null,'Новину успішно додано - обновіть сторінку.',"NON_ERROR");
         } else {
-            showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
+            showPopUpMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
         }
     };
     xhr.onerror = function() {
-        showErrorMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
+        showPopUpMessage(null,'Сталася помилка під час відправки форми.',"ERROR");
     };
 
     xhr.send(formData);
@@ -256,7 +256,7 @@ function confirmDelete(element) {
                     // location.reload(); // або видалити елемент з DOM
                     document.querySelector(`.slide [data-id="${newsId}"]`).parentElement.remove();
                 } else {
-                    showErrorMessage(null,'Помилка при видаленні новини.',"ERROR");
+                    showPopUpMessage(null,'Помилка при видаленні новини.',"ERROR");
                 }
             });
     }
@@ -283,7 +283,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
             if (response.ok) {
                 return response.json(); // Парсимо JSON для отримання redirectUrl
             } else if (response.status === 401) {
-                showErrorMessage(null, "Невірний логін або пароль");
+                showPopUpMessage(null, "Невірний логін або пароль");
             }
         })
         .then(data => {

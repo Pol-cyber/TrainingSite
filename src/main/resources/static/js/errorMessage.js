@@ -1,5 +1,5 @@
 // Повідомлення про помилку
-function showErrorMessage(errorMessageElement,textError,type) {
+function showPopUpMessage(errorMessageElement, textError, type) {
     if(errorMessageElement === null){
         errorMessageElement = document.querySelector('.popUpMessage');
     }

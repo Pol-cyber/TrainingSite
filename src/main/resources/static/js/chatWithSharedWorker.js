@@ -44,13 +44,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     connected: true,
                     lastConnectedTime: new Date().getTime()
                 }));
-                console.log(data);
             } else if (type === 'receiveMessageFromGeneral') {
                 let text = data.text;
                 let senderUsername = data.senderUsername;
                 receiveMessageToGeneral(senderUsername,text);
-            } else if(type === 'ping') {
-                console.log('Ping');
             } else if(type === 'receiveMessageFromUser'){
                 receiveMessageLogic(data)
             }
@@ -72,7 +69,6 @@ function receiveMessageLogic(data){
     if(document.getElementById('chatBox').style.display === 'none'){
         if(document.getElementById('userList').style.display !== 'none'){
             let onlineList = document.querySelectorAll("#onlineUserListContent li");
-            let offlineList = document.querySelectorAll("#userListContent li");
             onlineList.forEach(onlineUser => {
                 if(onlineUser.id === data.senderId){
                     let badgeElement = onlineUser.querySelector('.unread-badge');
@@ -86,20 +82,6 @@ function receiveMessageLogic(data){
                     }
                 }
             });
-            //  нижній код не сильно потрібен системі, но осткільки на даний момент немає нормальної системи онлайна я залишу це
-            offlineList.forEach(offlineUser => {
-                if(offlineUser.id === data.senderId){
-                    let badgeElement = offlineUser.querySelector('.unread-badge');
-                    if(badgeElement){
-                        badgeElement.textContent = parseInt(badgeElement.textContent) + 1 +'';
-                    } else {
-                        badgeElement = document.createElement('span');
-                        badgeElement.className = 'unread-badge';
-                        badgeElement.textContent = '1';
-                        offlineUser.appendChild(badgeElement);
-                    }
-                }
-            });
         }
     } else {
         let sender = checkWithWhoConversation();
@@ -110,7 +92,7 @@ function receiveMessageLogic(data){
             receiveMessageFromUser(text);
             worker.port.postMessage({ type: 'receiveSpecificMessage', data: { 'id': data.id} });
         } else {
-            showErrorMessage(null,"Вам надійшло повідомлення від іншого користувача.","NON_ERROR");
+            showPopUpMessage(null,"Вам надійшло повідомлення від іншого користувача.","NON_ERROR");
         }
     }
 }
@@ -121,7 +103,7 @@ function sendMessageToGeneral() {
     // let chatContent = document.getElementById('generalСhatContent');
     let message = chatInput.value;
     if(message.length < 1){
-        showErrorMessage(null,"Пусті повідомлення забороняються.","ERROR");
+        showPopUpMessage(null,"Пусті повідомлення забороняються.","ERROR");
         return;
     }
 
@@ -134,7 +116,7 @@ function sendMessageToUser() {
     let chatContent = document.getElementById('chatContent');
     let message = chatInput.value;
     if(message.length < 1){
-        showErrorMessage(null,"Пусті повідомлення забороняються.","ERROR");
+        showPopUpMessage(null,"Пусті повідомлення забороняються.","ERROR");
         return;
     }
     let receiver = checkWithWhoConversation();

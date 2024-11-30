@@ -5,31 +5,276 @@
     flex-direction: column;
     align-items: center;
     width: 24%;
-    height: 60%;
+    height: auto;
 }
 
 .user-image {
     width: 100%;
     max-width: 300px;
-    height: 30%;
+    height: 25%;
+    min-height: 110px;
     border-radius: 15%;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url('../images/backUser.jpeg');
     box-shadow: inset 0 0 7px rgba(0, 0, 0, 0.5);
+    background-image: url('../images/backUser.jpeg');
     background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* Встановлюємо контейнер відносним */
+    overflow: hidden;
+    cursor: pointer; /* Ефект курсора */
+}
+
+/* Зображення */
+.user-image-img {
+    width: 65%;
+    height: 85%;
+    border-radius: 50%;
+    box-shadow: 1px 1px 6px 4px rgba(255, 255, 255, 0.8);
+}
+
+/* Новий оверлей */
+.settings-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Напівпрозорий чорний фон */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Спочатку приховано */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Іконка */
+.settings-overlay i {
+    font-size: 2rem; /* Розмір іконки */
+    color: white;    /* Колір іконки */
+}
+
+/* Ефект при наведенні */
+.user-image:hover .settings-overlay {
+    opacity: 1; /* Оверлей стає видимим */
+}
+
+/* Іконка */
+.settings-overlay i {
+    font-size: 2rem; /* Розмір іконки */
+    color: white;    /* Колір іконки */
+}
+
+/* Ефект при наведенні */
+.user-image-img:hover .settings-overlay {
+    opacity: 1; /* Оверлей стає видимим */
+    z-index: 1000;
+}
+
+/*Меню налаштування юзера*/
+
+.settings-menu {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: linear-gradient(135deg, #f0f4f8, #ffffff);
+    width: 400px;
+    border-radius: 12px;
+    padding: 25px;
+    z-index: 1100;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+.settings-menu h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #2c3e50;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.settings-options {
+    margin-top: 20px;
+}
+
+.image-upload-label {
+    cursor: pointer;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    display: inline-block;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.image-upload-label:hover {
+    background: linear-gradient(90deg, #2575fc, #6a11cb);
+    box-shadow: 0 4px 10px rgba(39, 110, 241, 0.3);
+    transform: scale(1.01);
+}
+
+/* Стиль кнопки відписки */
+#unsubscribe-button {
+    padding: 12px 25px;
+    background: linear-gradient(90deg, #c53253, #e32e0e);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#unsubscribe-button:hover {
+    background: linear-gradient(90deg, #dd3f63, #e8371d);
+    box-shadow: 0 4px 10px rgba(255, 75, 43, 0.3);
+    transform: scale(1.01);
+}
+
+/* Стиль кнопки підписки */
+#subscribe-button {
+    padding: 12px 25px;
+    background: linear-gradient(90deg, #34c759, #28a745);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#subscribe-button:hover {
+    background: linear-gradient(90deg, #28a745, #34c759);
+    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3);
+    transform: scale(1.01);
+}
+
+/* Загальний стиль секції */
+.settings-section {
+    text-align: center;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+}
+
+#subscription-container {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.user-image img {
-    width: 50%;
-    height: 80%;
-    border-radius: 50%;
-    box-shadow: 1px 1px 6px 4px rgba(255, 255, 255, 0.8);
+.settings-section h3 {
+    font-size: 18px;
+    color: #34495e;
+    margin-bottom: 10px;
 }
+
+.custom-file-upload {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Кастомна кнопка вибору файлу */
+.image-upload-button {
+    cursor: pointer;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.image-upload-button:hover {
+    background: linear-gradient(90deg, #2575fc, #6a11cb);
+    box-shadow: 0 4px 10px rgba(39, 110, 241, 0.3);
+    transform: scale(1.01);
+}
+
+/* Ховаємо стандартний input */
+input[type="file"] {
+    display: none;
+}
+
+/* Текст "Файл не обрано" */
+.file-name {
+    margin-top: 3px;
+    font-size: 14px;
+    color: #6c757d;
+    font-style: italic;
+    transition: color 0.3s ease;
+}
+
+.file-name.selected {
+    color: #007bff;
+    font-style: normal;
+    font-weight: bold;
+}
+
+/* Попередній перегляд зображення */
+.image-preview-container {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+#image-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+#image-preview:hover {
+    transform: scale(1.05);
+}
+
+/* Кнопка "Прийняти" */
+#accept-button {
+    padding: 10px 20px;
+    background: linear-gradient(90deg, #34c759, #28a745);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+#accept-button:hover {
+    background: linear-gradient(90deg, #28a745, #34c759);
+    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3);
+    transform: scale(1.01);
+}
+
+/**/
 
 .menu-items {
     display: flex;
@@ -90,7 +335,7 @@
 }
 
 .container {
-    width: 70%;
+    width: 73%;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -112,18 +357,41 @@
     text-align: center;
     left: 28%;
     padding: 10px 10px 30px 10px;
+    overflow-y: auto;
+}
+
+.settings-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+    background-color: #1d1a6b;
+    border-radius: 4px;
+}
+
+.settings-content::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 1400px) {
+    .container {
+        width: 80%;
+    }
 }
 
 @media (max-width: 1100px) {
     .container {
         flex-direction: column;
         width: 85%;
+        height: 80%;
+        justify-content: space-evenly;
     }
     .user-menu {
         flex-direction: row;
         width: auto;
         justify-content: space-between;
         margin: 10px 0;
+        height: 20%;
     }
     .menu-items {
         width: 70%;
@@ -132,10 +400,12 @@
     }
     .settings-content {
         width: auto;
+        height: auto;
     }
     .user-image {
         width: 35%;
         max-width: 220px;
+        height: 95%;
     }
 }
 

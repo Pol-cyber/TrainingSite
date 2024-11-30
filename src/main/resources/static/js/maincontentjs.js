@@ -144,7 +144,7 @@ checkboxesLabels.forEach(label => {
 
         // Перевірка, чи обрано жоден з чекбоксів
         if (areAllCheckboxesNoChecked()) {
-            showErrorMessage(null,'Потрібно вибрати щонайменше один елемент',"ERROR");
+            showPopUpMessage(null,'Потрібно вибрати щонайменше один елемент',"ERROR");
             tSchedule_Submit.disabled = true;
             tSchedule_Submit.style.backgroundColor = '#af4b4b'
             // errorMessage.style.display = 'block'; // Показати повідомлення
@@ -187,7 +187,7 @@ function goToChatWithAdmin(){
                 // Створюємо кнопку або список для кожного адміна
                 if (allAdmin.length === 0) {
                     // Якщо список порожній, показуємо повідомлення
-                    showErrorMessage(null, 'Немає доступних адміністраторів',"ERROR");
+                    showPopUpMessage(null, 'Немає доступних адміністраторів',"ERROR");
                 } else {
                     allAdmin.forEach(admin => {
                         let adminButton = document.createElement('button');
@@ -216,6 +216,7 @@ function closeOverlay() {
     document.getElementById('mainOverlay').style.display = 'none';
     document.getElementById('socialMediaMenu').style.display = 'none';
     document.getElementById('scheduleModal').style.display = 'none';
+    document.getElementById('userSettingsMenu').style.display = 'none';
 }
 
 // Медіа меню
@@ -259,11 +260,11 @@ document.getElementById('characteristicForm').addEventListener('submit', functio
         .then(response =>  {
             if(response.ok){
                 // Обробляємо відповідь
-                showErrorMessage(null,"Успішно збережено. Будь ласка оновіть сторінку","NON_ERROR");
+                showPopUpMessage(null,"Успішно збережено. Будь ласка оновіть сторінку","NON_ERROR");
             } else {
                 // Обробляємо відповідь
                 response.text().then(errorMessage => {
-                    showErrorMessage(null, errorMessage, "ERROR");
+                    showPopUpMessage(null, errorMessage, "ERROR");
                 });
             }
         })
@@ -306,11 +307,11 @@ document.getElementById('tScheduleForm').addEventListener('submit', function(eve
             document.getElementById('loadingScreen').style.display = 'none';
             if(response.ok){
                 // Обробляємо відповідь
-                showErrorMessage(null,"Успішно збережено","NON_ERROR");
+                showPopUpMessage(null,"Успішно збережено","NON_ERROR");
             } else {
                 // Обробляємо відповідь
                 response.text().then(errorMessage => {
-                    showErrorMessage(null, errorMessage, "ERROR");
+                    showPopUpMessage(null, errorMessage, "ERROR");
                 });
             }
         })
@@ -389,17 +390,17 @@ function deletePlan() {
                                 document.getElementById('scheduleListButton').style.display = "none";
                             }
                         });
-                        showErrorMessage(null, "Успішно видалено", "NON_ERROR");
+                        showPopUpMessage(null, "Успішно видалено", "NON_ERROR");
                     } else {
                         // Обробляємо відповідь
                         response.text().then(errorMessage => {
-                            showErrorMessage(null, errorMessage, "ERROR");
+                            showPopUpMessage(null, errorMessage, "ERROR");
                         });
                     }
                 })
                 .catch(error => console.error('Помилка запиту:', error));
         } else {
-            showErrorMessage(null,"Для видалення не обрано план тренування","ERROR")
+            showPopUpMessage(null,"Для видалення не обрано план тренування","ERROR")
         }
     }
 }
@@ -484,3 +485,146 @@ function displayWorkoutListModal(){
     const workoutDetailsModal = document.getElementById("workoutDetailsModal");
     workoutDetailsModal.style.display = 'none';
 }
+
+
+// Налаштування юзера
+function showUserSettingsMenu() {
+    const overlay = document.getElementById('mainOverlay');
+    const settingsMenu = document.getElementById('userSettingsMenu');
+
+    overlay.style.display = 'block';
+    settingsMenu.style.display = 'block';
+}
+
+// Оновлення зображення
+function validateAndPreviewImage(fileInputId, fileNameId, maxSizeMB, maxPixel, previewId, acceptButtonId) {
+    const fileInput = document.getElementById(fileInputId);
+    const fileName = document.getElementById(fileNameId);
+    const previewImage = document.getElementById(previewId);
+    const acceptButton = document.getElementById(acceptButtonId);
+    const previewContainer = document.getElementById('image-preview-container');
+    const file = fileInput.files[0];
+
+    // Скидаємо стан кнопки "Прийняти" та попереднього перегляду
+    acceptButton.style.display = 'none';
+    previewContainer.style.display = 'none';
+    previewImage.src = '';
+    fileName.textContent = 'Файл не обрано';
+
+    if (!file) return;
+
+    // Перевірка розміру файлу
+    if (file.size > maxSizeMB * 1024 * 1024) {
+        showPopUpMessage(null,`Зображення повинно бути менше ${maxSizeMB} MB`,"ERROR");
+        fileInput.value = ''; // Очищуємо input
+        fileName.classList.remove('selected');
+        return;
+    }
+
+    // Перевірка розмірів зображення
+    const img = new Image();
+    img.onload = function () {
+        if (this.width > maxPixel || this.height > maxPixel) {
+            showPopUpMessage(null,`Зображення повинно мати розмір не більше ${maxPixel}x${maxPixel} пікселів`,"ERROR");
+            fileInput.value = ''; // Очищуємо input
+            fileName.classList.remove('selected');
+            return;
+        }
+
+        // Оновлення тексту назви файлу
+        fileName.textContent = `Обрано: ${file.name}`;
+        fileName.classList.add('selected');
+
+        // Відображення попереднього перегляду
+        previewImage.src = URL.createObjectURL(file);
+        previewContainer.style.display = 'flex';
+
+        // Відображення кнопки "Прийняти"
+        acceptButton.style.display = 'inline-block';
+    };
+
+    img.onerror = function () {
+        showPopUpMessage(null,'Файл не є коректним зображенням.',"ERROR");
+        fileInput.value = ''; // Очищуємо input
+        fileName.classList.remove('selected');
+    };
+
+    img.src = URL.createObjectURL(file);
+}
+
+function acceptImage(fileInputId) {
+    const fileInput = document.getElementById(fileInputId);
+    const file = fileInput.files[0];
+
+    if (!file) {
+        alert('Зображення не вибрано!');
+        return;
+    }
+
+    const csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+    const formData = new FormData();
+    formData.append('account-image', file); // Ім'я параметра повинно збігатися з серверним параметром @RequestParam
+
+    fetch('/api/user/account/changeImage', {
+        method: 'PATCH', // Заміна на PATCH
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                response.text().then(message => {
+                    showPopUpMessage(null,message,"NON_ERROR")
+                });
+                fileInput.value = ''; // Очищення інпуту після завантаження
+            } else {
+                response.text().then(error_message => {
+                    showPopUpMessage(null,error_message,"ERROR")
+                });
+            }
+        })
+        .catch(error => {
+            showPopUpMessage(null,'Не вдалося підключитися до сервера',"ERROR");
+        });
+}
+
+// Підписка або відписка від розсилки
+function changeSubscription(action) {
+    const csrfToken = document.querySelector('input[name="_csrf"]').value;
+    fetch('/api/user/account/changeSubscription?subscribe=' + action, {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    }).then(response => {
+        if (response.ok) {
+            const message = action ? 'Ви підписалися на розсилку!' : 'Ви відписалися від розсилки!';
+            showPopUpMessage(null,message,"NON_ERROR");
+            toggleSubscriptionButton(action);
+        } else {
+            const errorMessage = action ? 'Помилка підписки на розсилку.' : 'Помилка відписки від розсилки.';
+            showPopUpMessage(null,errorMessage,"ERROR");
+        }
+    }).catch(error => {
+        console.error('Помилка:', error);
+        showPopUpMessage(null,'Не вдалося підключитися до сервера',"ERROR");
+    });
+}
+
+function toggleSubscriptionButton(subscribe) {
+    const subscribeButton = document.getElementById('subscribe-button');
+    const unsubscribeButton = document.getElementById('unsubscribe-button');
+
+    // В залежності від дії ховаємо або показуємо кнопки
+    if (subscribe) {
+        subscribeButton.style.display = 'none';
+        unsubscribeButton.style.display = 'block';
+    } else {
+        subscribeButton.style.display = 'block';
+        unsubscribeButton.style.display = 'none';
+    }
+}
+
+

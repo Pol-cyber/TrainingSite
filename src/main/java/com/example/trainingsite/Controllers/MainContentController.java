@@ -22,6 +22,9 @@ public class MainContentController {
         if(!((User) auth.getPrincipal()).getWorkoutPlans().isEmpty()) { // перевіряю чи існує план тренування
             model.addAttribute("trainingPlans", WorkoutPlanService.getWorkoutPlanDTOs(((User) auth.getPrincipal()).getWorkoutPlans()));
         }
+        if(user.isNewsletterSub()){
+            model.addAttribute("isNewsletterSub", true);
+        }
         if(user.getUserCharacteristic() != null) { // перевіряю чи існує характеристика
             UserCharacteristic userCharacteristic = user.getUserCharacteristic();
 

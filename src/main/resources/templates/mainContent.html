@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link th:href="@{/styles/general.css}" rel="stylesheet" />
-    <link th:href="@{/styles/maincontentstyles.css}" rel="stylesheet" />
+    <link th:href="@{/styles/general.css}" rel="stylesheet"/>
+    <link th:href="@{/styles/maincontentstyles.css}" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" sizes="16x16" href="/images/favicon.ico">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -27,42 +28,56 @@
 <main>
     <p class="popUpMessage" style="opacity: 0">Повідомлення</p>
 
-    <p id="authorizeUserName" style="display: none" th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">Username</p>
+    <p id="authorizeUserName" style="display: none"
+       th:text="${#authorization.expression('isAuthenticated()')} ? ${#authentication.principal.username} : 'undefined'">
+        Username</p>
     <div class="container">
         <!-- Перша секція з зображенням користувача та меню -->
         <section class="user-menu">
-            <div class="user-image">
-                <img th:if="${#authentication.principal.image != null}"
-                     th:src="@{'/bdimage/user/' + ${#authentication.principal.username}}" th:alt="UserImage">
-                <img th:unless="${#authentication.principal.image != null}" th:src="@{/images/userDefault.jpg}"
+            <div class="user-image" onclick="showUserSettingsMenu()">
+                <img class="user-image-img"
+                     th:if="${#authentication.principal.image != null}"
+                     th:src="@{'/bdimage/user/' + ${#authentication.principal.username}}"
                      th:alt="UserImage">
+                <img class="user-image-img"
+                     th:unless="${#authentication.principal.image != null}"
+                     th:src="@{/images/userDefault.jpg}"
+                     th:alt="UserImage">
+                <div class="settings-overlay">
+                    <i class="fas fa-cog"></i>
+                </div>
             </div>
             <div class="menu-items">
-                <a  onclick="showForm('characteristics')" id="characteristics-link" class="menu-link">Характеристика</a>
-                <a  onclick="showForm('tSchedule')" id="tSchedule-link" class="menu-link">Тренування</a>
-                <a  onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Підтримка</a>
-                <a  onclick="showAllMedia()" id="social-media-link" class="menu-link">Мережі</a>
+                <a onclick="showForm('characteristics')" id="characteristics-link" class="menu-link">Характеристика</a>
+                <a onclick="showForm('tSchedule')" id="tSchedule-link" class="menu-link">Тренування</a>
+                <a onclick="goToChatWithAdmin()" id="technical-support-link" class="menu-link">Підтримка</a>
+                <a onclick="showAllMedia()" id="social-media-link" class="menu-link">Мережі</a>
                 <!-- Додайте інші пункти меню, якщо потрібно -->
             </div>
         </section>
         <div class="settings-content">
             <!-- Друга секція для характеристики користувача -->
             <section class="characteristics-section">
-                <form id="characteristicForm" class="characteristic-form" th:action="@{/api/user/characteristic}" method="post">
+                <form id="characteristicForm" class="characteristic-form" th:action="@{/api/user/characteristic}"
+                      method="post">
                     <h2>Характеристики</h2>
                     <div class="form-content">
                         <div class="form-section">
                             <label for="weight">Вага (кг):</label>
-                            <input type="number" id="weight" name="weight" th:value="${characteristics != null ? characteristics.weight : 50}">
+                            <input type="number" id="weight" name="weight"
+                                   th:value="${characteristics != null ? characteristics.weight : 50}">
 
                             <label for="height">Ріст (см):</label>
-                            <input type="number" id="height" name="height" th:value="${characteristics != null ? characteristics.height : 170}">
+                            <input type="number" id="height" name="height"
+                                   th:value="${characteristics != null ? characteristics.height : 170}">
 
                             <label for="asthma">Респіраторні проблеми або астма?</label>
-                            <input type="checkbox" id="asthma" name="healthConditions" value="Asthma" th:checked="${characteristics != null and characteristics.healthConditions.contains('Asthma')}">
+                            <input type="checkbox" id="asthma" name="healthConditions" value="Asthma"
+                                   th:checked="${characteristics != null and characteristics.healthConditions.contains('Asthma')}">
 
                             <label for="heartProblems">Проблеми із серцем?</label>
-                            <input type="checkbox" id="heartProblems" name="healthConditions" value="Heart problems" th:checked="${characteristics != null and characteristics.healthConditions.contains('Heart problems')}">
+                            <input type="checkbox" id="heartProblems" name="healthConditions" value="Heart problems"
+                                   th:checked="${characteristics != null and characteristics.healthConditions.contains('Heart problems')}">
                         </div>
 
                         <div class="divider"></div>
@@ -71,36 +86,67 @@
                             <label for="gender">Стать:</label>
                             <div class="styled-select">
                                 <select id="gender" name="gender">
-                                    <option value="Male" th:selected="${characteristics != null and characteristics.gender == 'Male'}">Чоловік</option>
-                                    <option value="Female" th:selected="${characteristics != null and characteristics.gender == 'Female'}">Жінка</option>
+                                    <option value="Male"
+                                            th:selected="${characteristics != null and characteristics.gender == 'Male'}">
+                                        Чоловік
+                                    </option>
+                                    <option value="Female"
+                                            th:selected="${characteristics != null and characteristics.gender == 'Female'}">
+                                        Жінка
+                                    </option>
                                 </select>
                             </div>
 
                             <label for="trainingGoal">Мета тренування:</label>
                             <div class="styled-select">
                                 <select id="trainingGoal" name="trainingGoal">
-                                    <option value="Build muscle" th:selected="${characteristics != null and characteristics.trainingGoal == 'Build muscle'}">Набір м'язової маси</option>
-                                    <option value="Lose weight" th:selected="${characteristics != null and characteristics.trainingGoal == 'Lose weight'}">Втрата ваги</option>
-                                    <option value="Form support" th:selected="${characteristics != null and characteristics.trainingGoal == 'Form support'}">Підтримка форми</option>
-                                    <option value="Rehabilitation" th:selected="${characteristics != null and characteristics.trainingGoal == 'Rehabilitation'}">Реабілітація</option>
+                                    <option value="Build muscle"
+                                            th:selected="${characteristics != null and characteristics.trainingGoal == 'Build muscle'}">
+                                        Набір м'язової маси
+                                    </option>
+                                    <option value="Lose weight"
+                                            th:selected="${characteristics != null and characteristics.trainingGoal == 'Lose weight'}">
+                                        Втрата ваги
+                                    </option>
+                                    <option value="Form support"
+                                            th:selected="${characteristics != null and characteristics.trainingGoal == 'Form support'}">
+                                        Підтримка форми
+                                    </option>
+                                    <option value="Rehabilitation"
+                                            th:selected="${characteristics != null and characteristics.trainingGoal == 'Rehabilitation'}">
+                                        Реабілітація
+                                    </option>
                                 </select>
                             </div>
 
                             <label for="fitnessLevel">Рівень фізичної підготовки:</label>
                             <div class="styled-select">
                                 <select id="fitnessLevel" name="fitnessLevel">
-                                    <option value="Beginner" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Beginner'}">Початківець</option>
-                                    <option value="Intermediate" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Intermediate'}">Проміжний</option>
-                                    <option value="Advanced" th:selected="${characteristics != null and characteristics.fitnessLevel == 'Advanced'}">Досвідчений</option>
+                                    <option value="Beginner"
+                                            th:selected="${characteristics != null and characteristics.fitnessLevel == 'Beginner'}">
+                                        Початківець
+                                    </option>
+                                    <option value="Intermediate"
+                                            th:selected="${characteristics != null and characteristics.fitnessLevel == 'Intermediate'}">
+                                        Проміжний
+                                    </option>
+                                    <option value="Advanced"
+                                            th:selected="${characteristics != null and characteristics.fitnessLevel == 'Advanced'}">
+                                        Досвідчений
+                                    </option>
                                 </select>
                             </div>
 
                             <label for="obesity">Присутнє ожиріння?</label>
-                            <input type="checkbox" id="obesity" name="healthConditions" value="Obesity" th:checked="${characteristics != null and characteristics.healthConditions.contains('Obesity')}">
+                            <input type="checkbox" id="obesity" name="healthConditions" value="Obesity"
+                                   th:checked="${characteristics != null and characteristics.healthConditions.contains('Obesity')}">
                         </div>
                     </div>
 
-                    <button id="characteristicsButton" class="submit_button" type="submit" th:text="${characteristics != null ? 'Оновити характеристику' : 'Підтвердити характеристику'}">Підтвердити характеристику</button>
+                    <button id="characteristicsButton" class="submit_button" type="submit"
+                            th:text="${characteristics != null ? 'Оновити характеристику' : 'Підтвердити характеристику'}">
+                        Підтвердити характеристику
+                    </button>
                 </form>
             </section>
 
@@ -124,26 +170,32 @@
                             <div class="checkboxes">
                                 <label>
                                     Медитація
-                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Meditation" checked>
+                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes"
+                                           value="Meditation" checked>
                                 </label>
                                 <label>
                                     Силове навантаження
-                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Weight training">
+                                    <input class="checkboxesLabel" type="checkbox" name="trainingTypes"
+                                           value="Weight training">
                                 </label>
                                 <label>
                                     Кардіо
                                     <input class="checkboxesLabel" type="checkbox" name="trainingTypes" value="Cardio">
                                 </label>
                             </div>
-                            <p class="additionalInformation error-message" style="display: none">Потрібно вибрати щонайменше один елемент</p>
+                            <p class="additionalInformation error-message" style="display: none">Потрібно вибрати
+                                щонайменше один елемент</p>
                         </div>
 
                         <div class="divider"></div>
 
                         <div class="form-section">
-                            <label for="daysPerWeek">К-сть занять в неділю - <output id="sliderValue">1</output></label>
+                            <label for="daysPerWeek">К-сть занять в неділю -
+                                <output id="sliderValue">1</output>
+                            </label>
                             <div class="slider-container">
-                                <input type="range" id="daysPerWeek" name="daysPerWeek" min="1" max="7" value="0" oninput="sliderValue.value = this.value">
+                                <input type="range" id="daysPerWeek" name="daysPerWeek" min="1" max="7" value="0"
+                                       oninput="sliderValue.value = this.value">
                             </div>
                             <label for="sessionDuration">Тривалість тренування (хв):</label>
                             <input type="number" id="sessionDuration" name="sessionDuration" value="60">
@@ -153,11 +205,17 @@
                     </div>
 
                     <div th:if="${characteristics != null or trainingPlans != null}" class="submit_button_container">
-                        <button th:if="${characteristics != null}" type="submit" id="tSchedule_submitButton" class="submit_button" th:text="${trainingPlans != null ? 'Створити новий графік' : 'Створити графік'}">Створити графік</button>
-<!--                        <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonDeleteTraining" class="delete_button" >Видалити графік</button>-->
-                        <button th:if="${(trainingPlans != null)}" type="button" class="submit_button" onclick="toggleModal()">Відкрити список графіків</button>
-                    </div></form>
-<!--                Доробити!!!!!!-->
+                        <button th:if="${characteristics != null}" type="submit" id="tSchedule_submitButton"
+                                class="submit_button"
+                                th:text="${trainingPlans != null ? 'Створити новий графік' : 'Створити графік'}">
+                            Створити графік
+                        </button>
+                        <!--                        <button th:if="${(hasTrainingPlan == true)}" type="button" id="buttonDeleteTraining" class="delete_button" >Видалити графік</button>-->
+                        <button th:if="${(trainingPlans != null)}" type="button" class="submit_button"
+                                onclick="toggleModal()">Відкрити список графіків
+                        </button>
+                    </div>
+                </form>
             </section>
         </div>
     </div>
@@ -165,8 +223,8 @@
         <div class="spinner"></div> <!-- Спінер завантаження -->
     </div>
     <div id="scheduleModal" class="modal fade-in" style="display: none;">
-        <div id="workoutListModal" >
-            <div class="modal-content" >
+        <div id="workoutListModal">
+            <div class="modal-content">
                 <h2>Список графіків</h2>
                 <ul class="no-bullets">
                     <li th:each="trainingPlan : ${trainingPlans}">
@@ -175,7 +233,8 @@
                             <!-- Секція для детальної інформації, що відображається лише при виборі -->
                             <div class="details" style="display: none;">
                                 <p><strong>Мета:</strong> <span th:text="${trainingPlan.goal}"></span></p>
-                                <p><strong>Рівень підготовки:</strong> <span th:text="${trainingPlan.fitnessLevel}"></span>
+                                <p><strong>Рівень підготовки:</strong> <span
+                                        th:text="${trainingPlan.fitnessLevel}"></span>
                                 </p>
 
                                 <p>
@@ -199,7 +258,7 @@
                 <div id="scheduleListButton" class="button-container" style="display: none;">
                     <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
                     <button class="delete_button" onclick="deletePlan()">Видалити</button>
-                    <button class="submit_button"  onclick="fetchWorkoutPlanDetails()">Детальніше</button>
+                    <button class="submit_button" onclick="fetchWorkoutPlanDetails()">Детальніше</button>
                 </div>
             </div>
         </div>
@@ -278,6 +337,48 @@
             </div>
         </div>
     </div>
+    <div id="userSettingsMenu" class="settings-menu">
+        <h2>Налаштування користувача</h2>
+        <div class="settings-options">
+            <div class="settings-section">
+                <h3>Змінити зображення</h3>
+                <div class="custom-file-upload">
+                    <label for="image-upload" class="image-upload-button">
+                        Оберіть зображення
+                    </label>
+                    <input type="file" id="image-upload" name="image-upload" accept="image/*"
+                           onchange="validateAndPreviewImage('image-upload', 'file-name', 1, 1000, 'image-preview', 'accept-button')" />
+                    <span id="file-name" class="file-name">Файл не обрано</span>
+                </div>
+                <div class="image-preview-container" id="image-preview-container" style="display: none;">
+                    <img id="image-preview" alt="Попередній перегляд" />
+                    <button id="accept-button" style="display: none;" onclick="acceptImage('image-upload')">Прийняти</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Розсилка</h3>
+                <div id="subscription-container">
+                    <!-- Кнопка для підписки -->
+                    <button
+                            id="subscribe-button"
+                            onclick="changeSubscription(true)"
+                            th:style="${isNewsletterSub} ? 'display:none;' : 'display:block;'">
+                        Підписатися на розсилку
+                    </button>
+
+                    <!-- Кнопка для відписки -->
+                    <button
+                            id="unsubscribe-button"
+                            onclick="changeSubscription(false)"
+                            th:style="${isNewsletterSub} ? 'display:block;' : 'display:none;'">
+                        Відписатись від розсилки
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div id="mainOverlay" class="mainOverlay fade-in" onclick="closeOverlay()"></div>
     <div id="adminList" class="admin-list fade-in" style="display: none">
     </div>
@@ -291,13 +392,13 @@
 
 </main>
 
-<img th:src="@{/images/nightStartLogo.jpg}" alt="Full Screen Image" class="full-screen-image">
-<script type="text/javascript" th:src="@{/js/errorMessage.js}"></script>
-<script type="text/javascript" th:src="@{/js/generalForChat.js}"></script>
-<!--<script type="text/javascript" th:src="@{/js/chatWithoutSharedWorker.js}"></script>-->
-<script type="text/javascript" th:src="@{/js/chatWithSharedWorker.js}"></script>
-<script type="text/javascript" th:src="@{/js/maincontentjs.js}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <img th:src="@{/images/nightStartLogo.jpg}" alt="Full Screen Image" class="full-screen-image">
+    <script type="text/javascript" th:src="@{/js/errorMessage.js}"></script>
+    <script type="text/javascript" th:src="@{/js/generalForChat.js}"></script>
+    <!--<script type="text/javascript" th:src="@{/js/chatWithoutSharedWorker.js}"></script>-->
+    <script type="text/javascript" th:src="@{/js/chatWithSharedWorker.js}"></script>
+    <script type="text/javascript" th:src="@{/js/maincontentjs.js}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </body>
 </html>

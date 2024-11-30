@@ -34,7 +34,7 @@ function connectWebSocket(authorizedUser) {
 
         }, function (error) {
             console.error('Error connecting to WebSocket:', error);
-            showErrorMessage(null,'Could not connect to WebSocket. Please try again.',"ERROR");
+            showPopUpMessage(null,'Could not connect to WebSocket. Please try again.',"ERROR");
         });
 
         socket.onclose = function() {
@@ -105,9 +105,10 @@ function checkAndCloseWorker() {
 }
 
 // Періодична перевірка активності портів
-setInterval(() => {
+setTimeout(() => {
     if(changeStatus === false) {
         stompClient.send('/change.user.status', {}, 'ONLINE');
         changeStatus = true;
     }
-}, 30000);
+}, 5000);
+

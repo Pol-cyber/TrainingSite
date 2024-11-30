@@ -21,6 +21,11 @@ public interface UserRepo extends CrudRepository<User,String> {
     @Query("UPDATE User u SET u.status = :newStatus WHERE u.username = :username")
     void updateStatusByLogin(@Param("username") String username, @Param("newStatus") User.Status newStatus);
 
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.image = :newImage WHERE u.username = :username")
+    void updateImageByLogin(@Param("username") String username, @Param("newImage") byte[] newImage);
+
 
     @Query("SELECT u FROM User u WHERE u.username <> :activeUsername")
     List<User> getOnlineUserWithoutActiveUser(@Param("activeUsername") String activeUsername);
@@ -30,6 +35,11 @@ public interface UserRepo extends CrudRepository<User,String> {
 
     @Query("SELECT u FROM User u WHERE u.role = 'ROLE_ADMIN' AND u.username <> :currentUserName")
     List<User> getAllAdminUsers(@Param("currentUserName") String currentUserName);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE User u SET u.newsletterSub = :newsletterSubscribed WHERE u.username = :username")
+    void updateNewsletterSubscription(@Param("username") String username, @Param("newsletterSubscribed") boolean newsletterSubscribed);
 }
 
 
